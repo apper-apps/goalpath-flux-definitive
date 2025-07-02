@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import useClickOutside from 'react-use-click-outside';
+import useOnClickOutside from 'use-onclickoutside';
 import Button from '@/components/atoms/Button';
 import ApperIcon from '@/components/ApperIcon';
 import { notificationService } from '@/services/api/notificationService';
@@ -13,9 +13,9 @@ const location = useLocation();
   const [notificationDropdownOpen, setNotificationDropdownOpen] = useState(false);
   const [notificationLoading, setNotificationLoading] = useState(false);
   const [unreadCount, setUnreadCount] = useState(0);
-  const notificationRef = useRef(null);
+const notificationRef = useRef(null);
   
-  useClickOutside(notificationRef, () => {
+  useOnClickOutside(notificationRef, () => {
     setNotificationDropdownOpen(false);
   });
   
