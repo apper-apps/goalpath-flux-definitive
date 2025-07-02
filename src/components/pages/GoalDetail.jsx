@@ -24,6 +24,37 @@ const GoalDetail = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   
+  // Listen for smart adjustment events
+  useEffect(() => {
+    const handleMilestonesAdjusted = (event) => {
+      const { adjustments } = event.detail;
+      if (adjustments.length > 0) {
+        // Reload milestones to show adjustments
+        loadData();
+        toast.info(`🤖 Smart adjustments applied to ${adjustments.length} milestone(s) to help you stay on track!`, {
+          autoClose: 5000
+        });
+      }
+    };
+    
+    const handleStressAdjustments = (event) => {
+      const { adjustments, stressLevel } = event.detail;
+      if (adjustments.length > 0) {
+        loadData();
+        toast.success(`😌 Simplified ${adjustments.length} milestone(s) to reduce stress. You've got this!`, {
+          autoClose: 6000
+        });
+      }
+    };
+    
+    window.addEventListener('milestones-adjusted', handleMilestonesAdjusted);
+    window.addEventListener('stress-adjustments-applied', handleStressAdjustments);
+    
+    return () => {
+      window.removeEventListener('milestones-adjusted', handleMilestonesAdjusted);
+      window.removeEventListener('stress-adjustments-applied', handleStressAdjustments);
+    };
+  }, []);
   const loadData = async () => {
     try {
       setLoading(true);
@@ -47,7 +78,7 @@ const GoalDetail = () => {
     loadData();
   }, [id]);
   
-  const handleMilestoneToggle = async (milestoneId) => {
+const handleMilestoneToggle = async (milestoneId) => {
     try {
       const milestone = milestones.find(m => m.Id === milestoneId);
       const updatedMilestone = {
@@ -72,6 +103,19 @@ const GoalDetail = () => {
       const updatedGoal = { ...goal, progress: newProgress };
       await goalService.update(goal.Id, updatedGoal);
       setGoal(updatedGoal);
+      
+      // Trigger smart adjustment analysis after milestone completion
+      if (updatedMilestone.completed) {
+        try {
+          const adjustments = await milestoneService.checkAndApplySmartAdjustments(goal.Id, updatedMilestones);
+          if (adjustments.length > 0) {
+            // Reload data to show any adjustments
+            setTimeout(() => loadData(), 1000);
+          }
+        } catch (adjustError) {
+          console.warn('Smart adjustment check failed:', adjustError);
+        }
+      }
       
       toast.success(
         updatedMilestone.completed 

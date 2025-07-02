@@ -51,6 +51,43 @@ class CheckInService {
     this.checkIns.splice(index, 1);
     return true;
   }
+// Get recent mood data for stress analysis
+  async getRecentMoodData(goalId) {
+    await this.delay();
+    
+    // Return recent check-ins sorted by date (most recent first)
+    const recentCheckIns = [...this.checkIns]
+      .sort((a, b) => new Date(b.date) - new Date(a.date))
+      .slice(0, 14); // Last 2 weeks
+    
+    return recentCheckIns;
+  }
+  
+  // Analyze mood patterns for stress detection
+  async analyzeMoodPatterns() {
+    await this.delay();
+    
+    const recentCheckIns = await this.getRecentMoodData();
+    const moodCounts = {};
+    const stressIndicators = ['stressed', 'overwhelmed', 'anxious', 'frustrated', 'burned_out'];
+    
+    recentCheckIns.forEach(checkIn => {
+      if (checkIn.mood) {
+        moodCounts[checkIn.mood] = (moodCounts[checkIn.mood] || 0) + 1;
+      }
+    });
+    
+    const totalMoods = Object.values(moodCounts).reduce((sum, count) => sum + count, 0);
+    const stressCount = stressIndicators.reduce((sum, mood) => sum + (moodCounts[mood] || 0), 0);
+    
+    return {
+      totalEntries: totalMoods,
+      stressPercentage: totalMoods > 0 ? (stressCount / totalMoods) * 100 : 0,
+      dominantMood: Object.keys(moodCounts).reduce((a, b) => moodCounts[a] > moodCounts[b] ? a : b, 'neutral'),
+      moodDistribution: moodCounts,
+      trendingStressed: stressCount > totalMoods * 0.4
+    };
+  }
   
   delay(ms = 250) {
     return new Promise(resolve => setTimeout(resolve, ms));

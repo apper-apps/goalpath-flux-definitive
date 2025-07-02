@@ -5,13 +5,36 @@ import ApperIcon from "@/components/ApperIcon";
 import { milestoneService } from "@/services/api/milestoneService";
 
 const MilestoneList = ({ milestones, onToggle, showCheckboxes = true, goalId }) => {
-  // Track behavioral context when milestones are rendered
+  // Track behavioral context and trigger smart adjustments when milestones are rendered
   useEffect(() => {
     if (milestones && milestones.length > 0 && goalId) {
       milestoneService.trackMilestoneViewing(goalId, milestones);
+      
+      // Trigger smart adjustment check
+      milestoneService.checkAndApplySmartAdjustments(goalId, milestones)
+        .then(adjustments => {
+if (adjustments.length > 0) {     
+            // Notify parent component about adjustments
+            setTimeout(() => {
+              let event;
+              try {
+                event = new CustomEvent('milestones-adjusted', {
+                  detail: { adjustments, goalId }
+                });
+              } catch (e) {
+                // Fallback for older browsers
+                event = document.createEvent('CustomEvent');
+                event.initCustomEvent('milestones-adjusted', false, false, {
+                  adjustments, goalId
+                });
+              }
+              window.dispatchEvent(event);
+            }, 100);
+          }
+        })
+        .catch(console.warn);
     }
   }, [milestones, goalId]);
-
   if (!milestones || milestones.length === 0) {
     return (
       <div className="text-center py-8 text-slate-400">
@@ -56,6 +79,34 @@ onClick={async () => {
                     goalId, 
                     completionContext
                   );
+                  
+                  // Check for stress indicators and trigger smart adjustments
+                  try {
+                    const stressAnalysis = await milestoneService.analyzeStressIndicators(goalId);
+                    if (stressAnalysis.stressLevel > 0.6) {
+                      const adjustments = await milestoneService.applyStressBasedAdjustments(goalId, stressAnalysis);
+if (adjustments.length > 0) {
+                        // Notify about stress-based adjustments
+                        setTimeout(() => {
+                          let event;
+                          try {
+                            event = new CustomEvent('stress-adjustments-applied', {
+                              detail: { adjustments, stressLevel: stressAnalysis.stressLevel }
+                            });
+                          } catch (e) {
+                            // Fallback for older browsers
+                            event = document.createEvent('CustomEvent');
+                            event.initCustomEvent('stress-adjustments-applied', false, false, {
+                              adjustments, stressLevel: stressAnalysis.stressLevel
+                            });
+                          }
+                          window.dispatchEvent(event);
+                        }, 500);
+                      }
+                    }
+                  } catch (error) {
+                    console.warn('Smart adjustment failed:', error);
+                  }
                   
 // Trigger celebration for milestone completion
                   setTimeout(() => {
@@ -140,7 +191,7 @@ onClick={async () => {
               }
             </div>
             
-            {/* Show context-aware difficulty indicator */}
+{/* Show context-aware difficulty indicator */}
             {milestone.difficulty && (
               <div className={`
                 text-xs px-2 py-0.5 rounded-full flex items-center gap-1
@@ -156,6 +207,23 @@ onClick={async () => {
                   size={10} 
                 />
                 {milestone.difficulty}
+              </div>
+            )}
+            
+            {/* Smart adjustment indicator */}
+            {milestone.adjustedBy && (
+              <div className="text-xs px-2 py-0.5 rounded-full bg-purple-500/20 text-purple-400 flex items-center gap-1">
+                <ApperIcon name="Sparkles" size={10} />
+                AI Adjusted
+              </div>
+            )}
+            
+            {/* Adjustment reason tooltip */}
+            {milestone.adjustmentReason && (
+              <div className="text-xs px-2 py-0.5 rounded-full bg-blue-500/20 text-blue-400 flex items-center gap-1" title={milestone.adjustmentReason}>
+                <ApperIcon name="Info" size={10} />
+                {milestone.adjustmentReason.includes('stress') ? 'Stress Relief' : 
+                 milestone.adjustmentReason.includes('behind') ? 'Schedule Help' : 'Optimized'}
               </div>
             )}
             

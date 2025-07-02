@@ -5,11 +5,14 @@ class MilestoneService {
   constructor() {
     this.milestones = [...milestonesData];
     this.nextId = Math.max(...this.milestones.map(m => m.Id)) + 1;
-    this.behaviorData = {
+this.behaviorData = {
       completionPatterns: [],
       weekendPreferences: {},
       difficultyPreferences: {},
-      pacingHistory: []
+      pacingHistory: [],
+      stressIndicators: [],
+      adjustmentHistory: [],
+      moodPatterns: {}
     };
   }
   async getAll() {
@@ -100,6 +103,12 @@ async update(id, milestoneData) {
       
       // Adjust for weekend preferences
       const weekendOptimizedMilestones = this.optimizeForWeekends(adaptiveMilestones, behaviorAnalysis);
+      
+      // Apply smart adjustments if user shows stress patterns
+      const stressAnalysis = await this.analyzeStressIndicators(goalData.Id || 0);
+      if (stressAnalysis.stressLevel > 0.5) {
+        return this.applyPreemptiveAdjustments(weekendOptimizedMilestones, stressAnalysis);
+      }
       
       return weekendOptimizedMilestones;
       
@@ -300,6 +309,251 @@ async update(id, milestoneData) {
     const date = new Date(fromDate);
     const daysUntilSaturday = (6 - date.getDay()) % 7;
     return addDays(date, daysUntilSaturday || 7);
+  }
+  
+// SMART ADJUSTMENT ENGINE
+  
+  // Main entry point for smart adjustments
+  async checkAndApplySmartAdjustments(goalId, milestones) {
+    await this.delay(100);
+    
+    try {
+      const adjustments = [];
+      
+      // Check if user is behind schedule
+      const scheduleAnalysis = this.analyzeScheduleAdherence(milestones);
+      if (scheduleAnalysis.behindSchedule) {
+        const scheduleAdjustments = await this.applyScheduleBasedAdjustments(goalId, milestones, scheduleAnalysis);
+        adjustments.push(...scheduleAdjustments);
+      }
+      
+      // Check for stress indicators
+      const stressAnalysis = await this.analyzeStressIndicators(goalId);
+      if (stressAnalysis.stressLevel > 0.6) {
+        const stressAdjustments = await this.applyStressBasedAdjustments(goalId, stressAnalysis);
+        adjustments.push(...stressAdjustments);
+      }
+      
+      // Record adjustment history
+      if (adjustments.length > 0) {
+        this.behaviorData.adjustmentHistory.push({
+          goalId,
+          adjustedAt: new Date().toISOString(),
+          adjustmentCount: adjustments.length,
+          reasons: adjustments.map(a => a.reason)
+        });
+      }
+      
+      return adjustments;
+      
+    } catch (error) {
+      console.warn('Smart adjustment failed:', error);
+      return [];
+    }
+  }
+  
+  // Analyze if user is behind schedule
+  analyzeScheduleAdherence(milestones) {
+    const now = new Date();
+    const overdueMilestones = milestones.filter(m => 
+      !m.completed && new Date(m.dueDate) < now
+    );
+    
+    const upcomingMilestones = milestones.filter(m => 
+      !m.completed && new Date(m.dueDate) >= now && 
+      differenceInDays(new Date(m.dueDate), now) <= 7
+    );
+    
+    const totalIncomplete = milestones.filter(m => !m.completed).length;
+    const behindScheduleRatio = overdueMilestones.length / Math.max(totalIncomplete, 1);
+    
+    return {
+      behindSchedule: behindScheduleRatio > 0.3 || overdueMilestones.length >= 2,
+      overdueMilestones,
+      upcomingMilestones,
+      severityLevel: behindScheduleRatio > 0.6 ? 'high' : behindScheduleRatio > 0.3 ? 'medium' : 'low'
+    };
+  }
+  
+  // Analyze stress indicators from mood and behavior
+  async analyzeStressIndicators(goalId) {
+    try {
+      const { checkInService } = await import('./checkInService');
+      const checkIns = await checkInService.getRecentMoodData(goalId);
+      
+      let stressLevel = 0;
+      let stressReasons = [];
+      
+      // Analyze recent mood patterns
+      const recentMoods = checkIns.slice(0, 7); // Last 7 check-ins
+      const stressedMoods = recentMoods.filter(c => 
+        c.mood && ['stressed', 'overwhelmed', 'anxious', 'frustrated'].includes(c.mood.toLowerCase())
+      );
+      
+      if (stressedMoods.length > 2) {
+        stressLevel += 0.4;
+        stressReasons.push('frequent stress reported');
+      }
+      
+      // Check completion velocity decline
+      const completionPatterns = this.behaviorData.completionPatterns.filter(p => p.goalId === goalId);
+      if (completionPatterns.length > 5) {
+        const recentCompletions = completionPatterns.slice(-5);
+        const earlierCompletions = completionPatterns.slice(-10, -5);
+        
+        if (recentCompletions.length < earlierCompletions.length * 0.7) {
+          stressLevel += 0.3;
+          stressReasons.push('completion velocity declined');
+        }
+      }
+      
+      // Check for weekend avoidance (stress indicator)
+      const weekendAvoidance = this.detectWeekendAvoidance(goalId);
+      if (weekendAvoidance) {
+        stressLevel += 0.2;
+        stressReasons.push('weekend productivity decline');
+      }
+      
+      return {
+        stressLevel: Math.min(stressLevel, 1.0),
+        reasons: stressReasons,
+        recommendation: stressLevel > 0.7 ? 'major_simplification' : 
+                      stressLevel > 0.5 ? 'moderate_adjustment' : 'minor_tweaks'
+      };
+      
+    } catch (error) {
+      console.warn('Stress analysis failed:', error);
+      return { stressLevel: 0, reasons: [], recommendation: 'none' };
+    }
+  }
+  
+  // Apply schedule-based adjustments
+  async applyScheduleBasedAdjustments(goalId, milestones, scheduleAnalysis) {
+    const adjustments = [];
+    
+    // Reschedule overdue milestones
+    for (const milestone of scheduleAnalysis.overdueMilestones) {
+      const newDueDate = addDays(new Date(), this.calculateRescheduleBuffer(scheduleAnalysis.severityLevel));
+      
+      await this.update(milestone.Id, {
+        ...milestone,
+        dueDate: newDueDate.toISOString(),
+        adjustedBy: 'smart_engine',
+        adjustmentReason: 'Rescheduled due to being behind schedule'
+      });
+      
+      adjustments.push({
+        milestoneId: milestone.Id,
+        type: 'reschedule',
+        reason: 'behind_schedule',
+        oldDate: milestone.dueDate,
+        newDate: newDueDate.toISOString()
+      });
+    }
+    
+    // Simplify upcoming milestones if severely behind
+    if (scheduleAnalysis.severityLevel === 'high') {
+      for (const milestone of scheduleAnalysis.upcomingMilestones.slice(0, 2)) {
+        if (milestone.difficulty !== 'light') {
+          await this.update(milestone.Id, {
+            ...milestone,
+            difficulty: 'light',
+            adjustedBy: 'smart_engine',
+            adjustmentReason: 'Simplified to help catch up'
+          });
+          
+          adjustments.push({
+            milestoneId: milestone.Id,
+            type: 'simplify',
+            reason: 'catch_up_assistance'
+          });
+        }
+      }
+    }
+    
+    return adjustments;
+  }
+  
+  // Apply stress-based adjustments
+  async applyStressBasedAdjustments(goalId, stressAnalysis) {
+    const adjustments = [];
+    const goalMilestones = await this.getByGoalId(goalId);
+    const upcomingMilestones = goalMilestones.filter(m => 
+      !m.completed && new Date(m.dueDate) > new Date()
+    ).slice(0, 3); // Next 3 milestones
+    
+    for (const milestone of upcomingMilestones) {
+      let needsAdjustment = false;
+      const updates = { ...milestone };
+      
+      // Simplify difficulty based on stress level
+      if (stressAnalysis.recommendation === 'major_simplification' && milestone.difficulty !== 'light') {
+        updates.difficulty = 'light';
+        updates.adjustmentReason = 'Simplified to reduce stress';
+        needsAdjustment = true;
+      }
+      
+      // Extend deadline for stress relief
+      if (stressAnalysis.stressLevel > 0.7) {
+        const extension = stressAnalysis.stressLevel > 0.8 ? 5 : 3;
+        updates.dueDate = addDays(new Date(milestone.dueDate), extension).toISOString();
+        updates.adjustmentReason = updates.adjustmentReason ? 
+          `${updates.adjustmentReason} and extended for stress relief` : 
+          'Extended deadline for stress relief';
+        needsAdjustment = true;
+      }
+      
+      // Make weekend-friendly if stress is high
+      if (stressAnalysis.stressLevel > 0.6 && !milestone.weekendFriendly) {
+        updates.weekendFriendly = true;
+        updates.title = this.makeWeekendFriendly(milestone.title);
+        needsAdjustment = true;
+      }
+      
+      if (needsAdjustment) {
+        updates.adjustedBy = 'smart_engine';
+        await this.update(milestone.Id, updates);
+        
+        adjustments.push({
+          milestoneId: milestone.Id,
+          type: 'stress_relief',
+          reason: 'stress_level_high',
+          adjustments: Object.keys(updates).filter(k => updates[k] !== milestone[k])
+        });
+      }
+    }
+    
+    return adjustments;
+  }
+  
+  // Helper methods for smart adjustments
+  calculateRescheduleBuffer(severityLevel) {
+    switch (severityLevel) {
+      case 'high': return 7; // 1 week buffer
+      case 'medium': return 4; // 4 days buffer
+      default: return 2; // 2 days buffer
+    }
+  }
+  
+  detectWeekendAvoidance(goalId) {
+    const completions = this.behaviorData.completionPatterns.filter(p => p.goalId === goalId);
+    const weekendCompletions = completions.filter(c => isWeekend(new Date(c.completedAt)));
+    return completions.length > 10 && weekendCompletions.length / completions.length < 0.1;
+  }
+  
+  applyPreemptiveAdjustments(milestones, stressAnalysis) {
+    return milestones.map(milestone => {
+      if (stressAnalysis.stressLevel > 0.7) {
+        return {
+          ...milestone,
+          difficulty: 'light',
+          dueDate: addDays(new Date(milestone.dueDate), 2).toISOString(),
+          adjustedBy: 'smart_engine',
+          adjustmentReason: 'Pre-adjusted based on stress patterns'
+        };
+      }
+      return milestone;
+    });
   }
   
   // Track behavioral data for future improvements
