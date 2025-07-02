@@ -1,14 +1,14 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { animateScroll as scroll, scroller } from 'react-scroll';
-import ApperIcon from '@/components/ApperIcon';
-import Button from '@/components/atoms/Button';
-import Input from '@/components/atoms/Input';
-import Badge from '@/components/atoms/Badge';
-import Loading from '@/components/ui/Loading';
-import Error from '@/components/ui/Error';
-import { templateService } from '@/services/api/templateService';
-import { toast } from 'react-toastify';
+import React, { useEffect, useRef, useState } from "react";
+import { AnimatePresence, motion } from "framer-motion";
+import { scroll, scroller } from "react-scroll";
+import { toast } from "react-toastify";
+import ApperIcon from "@/components/ApperIcon";
+import Badge from "@/components/atoms/Badge";
+import Input from "@/components/atoms/Input";
+import Button from "@/components/atoms/Button";
+import Error from "@/components/ui/Error";
+import Loading from "@/components/ui/Loading";
+import { templateService } from "@/services/api/templateService";
 const TemplateGallery = ({ isOpen, onClose, onSelectTemplate }) => {
   const [templates, setTemplates] = useState([]);
   const [categories, setCategories] = useState([]);
@@ -63,16 +63,16 @@ const TemplateGallery = ({ isOpen, onClose, onSelectTemplate }) => {
 
   if (!isOpen) return null;
 
-  return (
+return (
     <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
       <motion.div
         initial={{ opacity: 0, scale: 0.9 }}
         animate={{ opacity: 1, scale: 1 }}
         exit={{ opacity: 0, scale: 0.9 }}
-        className="bg-gradient-surface rounded-2xl border border-slate-600/50 w-full max-w-6xl max-h-[90vh] overflow-hidden"
+        className="bg-gradient-surface rounded-2xl border border-slate-600/50 w-full max-w-6xl min-h-[80vh] max-h-[95vh] flex flex-col overflow-hidden"
       >
         {/* Header */}
-        <div className="p-6 border-b border-slate-600/50">
+        <div className="p-6 border-b border-slate-600/50 flex-shrink-0">
           <div className="flex items-center justify-between">
             <div>
               <h2 className="text-2xl font-display font-bold gradient-text mb-2">
@@ -102,9 +102,8 @@ const TemplateGallery = ({ isOpen, onClose, onSelectTemplate }) => {
             />
           </div>
         </div>
-
 {/* Category Tabs */}
-        <div className="px-6 py-4 border-b border-slate-600/50 overflow-x-auto">
+        <div className="px-6 py-4 border-b border-slate-600/50 overflow-x-auto flex-shrink-0">
           <div className="flex gap-2 min-w-max">
             {categories.map((category) => (
               <Button
@@ -135,7 +134,7 @@ const TemplateGallery = ({ isOpen, onClose, onSelectTemplate }) => {
 {/* Content */}
         <div 
           ref={contentRef}
-          className="flex-1 overflow-y-auto p-6 scroll-smooth relative"
+          className="flex-1 overflow-y-auto p-6 scroll-smooth relative min-h-[400px]"
           onScroll={(e) => {
             const scrollTop = e.target.scrollTop;
             setShowScrollTop(scrollTop > 200);
@@ -159,9 +158,9 @@ const TemplateGallery = ({ isOpen, onClose, onSelectTemplate }) => {
                   : `No templates available in the ${activeCategory} category`
                 }
               </p>
-            </div>
+</div>
           ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
               <AnimatePresence>
                 {filteredTemplates.map((template, index) => (
                   <motion.div
@@ -242,9 +241,9 @@ const TemplateGallery = ({ isOpen, onClose, onSelectTemplate }) => {
               </motion.button>
             )}
           </AnimatePresence>
-        </div>
+</div>
         {/* Footer */}
-        <div className="p-6 border-t border-slate-600/50 bg-surface/30">
+        <div className="p-6 border-t border-slate-600/50 bg-surface/30 flex-shrink-0">
           <div className="flex items-center justify-between">
             <p className="text-sm text-slate-400">
               {filteredTemplates.length} template{filteredTemplates.length !== 1 ? 's' : ''} available
