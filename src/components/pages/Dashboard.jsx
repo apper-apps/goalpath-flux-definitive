@@ -48,24 +48,24 @@ const Dashboard = () => {
     );
   }
   
-  return (
-    <div className="p-6 space-y-8">
+return (
+    <div className="p-4 sm:p-6 space-y-6 sm:space-y-8">
       {/* Welcome Section */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="text-center"
+className="text-center"
       >
-        <h1 className="text-4xl font-display font-bold gradient-text mb-4">
+        <h1 className="text-2xl sm:text-3xl lg:text-4xl font-display font-bold gradient-text mb-3 sm:mb-4">
           Welcome Back! 🚀
         </h1>
-        <p className="text-slate-400 text-lg">
+<p className="text-slate-400 text-sm sm:text-base lg:text-lg">
           Track your progress and achieve your dreams with AI-powered insights
         </p>
       </motion.div>
       
-      {/* Stats Grid */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+{/* Stats Grid */}
+      <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 lg:gap-6">
         <StatCard
           title="Total Goals"
           value={stats.totalGoals}
@@ -98,19 +98,19 @@ const Dashboard = () => {
       
       {/* Goals Section */}
       <div>
-        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
+<div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 sm:gap-4 mb-4 sm:mb-6">
           <div>
-            <h2 className="text-2xl font-display font-bold text-white">
+            <h2 className="text-xl sm:text-2xl font-display font-bold text-white">
               Your Goals
-            </h2>
-            <p className="text-slate-400">
+</h2>
+            <p className="text-slate-400 text-sm sm:text-base">
               {filteredGoals.length} {filter === 'all' ? '' : filter} goal{filteredGoals.length !== 1 ? 's' : ''}
             </p>
           </div>
           
-          <Link to="/goals">
-            <Button variant="primary" className="flex items-center gap-2">
-              <ApperIcon name="Plus" size={16} />
+<Link to="/goals">
+            <Button variant="primary" className="flex items-center gap-2 text-sm sm:text-base">
+              <ApperIcon name="Plus" size={14} className="sm:w-4 sm:h-4" />
               New Goal
             </Button>
           </Link>
@@ -134,8 +134,8 @@ const Dashboard = () => {
             actionLabel="Create Your First Goal"
             onAction={() => window.location.href = '/goals'}
           />
-        ) : (
-          <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">
+) : (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-4 sm:gap-6">
             {filteredGoals.map((goal, index) => (
               <motion.div
                 key={goal.Id}
@@ -162,29 +162,32 @@ const Dashboard = () => {
         >
           <h3 className="text-xl font-display font-semibold text-white mb-4">
             Quick Actions
-          </h3>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+</h3>
+          <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
             <Link to="/goals">
-              <Button variant="secondary" className="w-full justify-start">
-                <ApperIcon name="Plus" size={16} className="mr-2" />
-                Add New Goal
+<Button variant="secondary" className="w-full justify-start text-xs sm:text-sm py-2 sm:py-3">
+                <ApperIcon name="Plus" size={14} className="mr-1 sm:mr-2 sm:w-4 sm:h-4" />
+                <span className="hidden xs:inline">Add New Goal</span>
+                <span className="xs:hidden">Add Goal</span>
               </Button>
             </Link>
-            <Link to="/check-ins">
-              <Button variant="secondary" className="w-full justify-start">
-                <ApperIcon name="CheckCircle2" size={16} className="mr-2" />
-                View Check-ins
+<Link to="/check-ins">
+              <Button variant="secondary" className="w-full justify-start text-xs sm:text-sm py-2 sm:py-3">
+                <ApperIcon name="CheckCircle2" size={14} className="mr-1 sm:mr-2 sm:w-4 sm:h-4" />
+                <span className="hidden xs:inline">View Check-ins</span>
+                <span className="xs:hidden">Check-ins</span>
               </Button>
             </Link>
-            <Link to="/settings">
-              <Button variant="secondary" className="w-full justify-start">
-                <ApperIcon name="Settings" size={16} className="mr-2" />
+<Link to="/settings">
+              <Button variant="secondary" className="w-full justify-start text-xs sm:text-sm py-2 sm:py-3">
+                <ApperIcon name="Settings" size={14} className="mr-1 sm:mr-2 sm:w-4 sm:h-4" />
                 Settings
               </Button>
             </Link>
-            <Button variant="secondary" className="w-full justify-start">
-              <ApperIcon name="Download" size={16} className="mr-2" />
-              Export Progress
+<Button variant="secondary" className="w-full justify-start text-xs sm:text-sm py-2 sm:py-3">
+              <ApperIcon name="Download" size={14} className="mr-1 sm:mr-2 sm:w-4 sm:h-4" />
+              <span className="hidden xs:inline">Export Progress</span>
+              <span className="xs:hidden">Export</span>
             </Button>
           </div>
         </motion.div>

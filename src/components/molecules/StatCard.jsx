@@ -27,19 +27,19 @@ const StatCard = ({
     accent: 'text-accent'
   };
   
-  return (
+return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       whileHover={{ scale: 1.02 }}
       className={`
-        ${variants[variant]} rounded-xl p-6 border transition-all duration-300 
+        ${variants[variant]} rounded-xl p-4 sm:p-6 border transition-all duration-300 
         hover:shadow-lg ${className}
       `}
     >
-      <div className="flex items-center justify-between mb-4">
-        <div className={`p-3 rounded-lg bg-white/5 ${iconColors[variant]}`}>
-          <ApperIcon name={icon} size={24} />
+<div className="flex items-center justify-between mb-3 sm:mb-4">
+        <div className={`p-2 sm:p-3 rounded-lg bg-white/5 ${iconColors[variant]}`}>
+          <ApperIcon name={icon} size={20} className="sm:w-6 sm:h-6" />
         </div>
         
         {trend && (
@@ -61,11 +61,11 @@ const StatCard = ({
         )}
       </div>
       
-      <div>
-        <h3 className="text-2xl font-display font-bold text-white mb-1">
+<div>
+        <h3 className="text-xl sm:text-2xl font-display font-bold text-white mb-1">
           {value}
         </h3>
-        <p className="text-slate-400 text-sm">{title}</p>
+        <p className="text-slate-400 text-xs sm:text-sm">{title}</p>
         {subtitle && (
           <p className="text-slate-500 text-xs mt-1">{subtitle}</p>
         )}

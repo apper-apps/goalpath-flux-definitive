@@ -11,9 +11,9 @@ const FilterBar = ({
   onSearchChange,
   searchPlaceholder = 'Search...'
 }) => {
-  return (
-    <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-center justify-between mb-6">
-      <div className="flex flex-wrap gap-2">
+return (
+    <div className="flex flex-col gap-3 sm:gap-4 items-start mb-4 sm:mb-6">
+      <div className="flex flex-wrap gap-2 w-full">
         {filters.map((filter) => (
           <Button
             key={filter.value}
@@ -32,10 +32,9 @@ const FilterBar = ({
           </Button>
         ))}
       </div>
-      
-      {showSearch && (
-        <div className="relative w-full sm:w-auto sm:min-w-[300px]">
-          <ApperIcon 
+{showSearch && (
+        <div className="relative w-full sm:max-w-xs">
+          <ApperIcon
             name="Search" 
             size={20} 
             className="absolute left-3 top-1/2 transform -translate-y-1/2 text-slate-400"
@@ -44,8 +43,8 @@ const FilterBar = ({
             type="text"
             placeholder={searchPlaceholder}
             value={searchValue}
-            onChange={(e) => onSearchChange(e.target.value)}
-            className="w-full pl-10 pr-4 py-2 bg-surface border border-slate-600 rounded-lg text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+onChange={(e) => onSearchChange(e.target.value)}
+            className="w-full pl-10 pr-4 py-2.5 sm:py-2 text-sm bg-surface border border-slate-600 rounded-lg text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
           />
         </div>
       )}
