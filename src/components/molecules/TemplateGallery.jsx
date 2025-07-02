@@ -1,5 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { animateScroll as scroll, scroller } from 'react-scroll';
 import ApperIcon from '@/components/ApperIcon';
 import Button from '@/components/atoms/Button';
 import Input from '@/components/atoms/Input';
@@ -8,7 +9,6 @@ import Loading from '@/components/ui/Loading';
 import Error from '@/components/ui/Error';
 import { templateService } from '@/services/api/templateService';
 import { toast } from 'react-toastify';
-
 const TemplateGallery = ({ isOpen, onClose, onSelectTemplate }) => {
   const [templates, setTemplates] = useState([]);
   const [categories, setCategories] = useState([]);
@@ -16,7 +16,8 @@ const TemplateGallery = ({ isOpen, onClose, onSelectTemplate }) => {
   const [error, setError] = useState(null);
   const [activeCategory, setActiveCategory] = useState('all');
   const [searchQuery, setSearchQuery] = useState('');
-
+  const [showScrollTop, setShowScrollTop] = useState(false);
+  const contentRef = useRef(null);
   useEffect(() => {
     if (isOpen) {
       loadData();
@@ -102,7 +103,7 @@ const TemplateGallery = ({ isOpen, onClose, onSelectTemplate }) => {
           </div>
         </div>
 
-        {/* Category Tabs */}
+{/* Category Tabs */}
         <div className="px-6 py-4 border-b border-slate-600/50 overflow-x-auto">
           <div className="flex gap-2 min-w-max">
             {categories.map((category) => (
@@ -110,7 +111,16 @@ const TemplateGallery = ({ isOpen, onClose, onSelectTemplate }) => {
                 key={category.value}
                 variant={activeCategory === category.value ? "primary" : "ghost"}
                 size="sm"
-                onClick={() => setActiveCategory(category.value)}
+                onClick={() => {
+                  setActiveCategory(category.value);
+                  // Scroll to top of content when category changes
+                  if (contentRef.current) {
+                    contentRef.current.scrollTo({
+                      top: 0,
+                      behavior: 'smooth'
+                    });
+                  }
+                }}
                 className="flex items-center gap-2 whitespace-nowrap"
               >
                 <ApperIcon name={category.icon} size={16} />
@@ -122,9 +132,15 @@ const TemplateGallery = ({ isOpen, onClose, onSelectTemplate }) => {
             ))}
           </div>
         </div>
-
-        {/* Content */}
-        <div className="flex-1 overflow-y-auto p-6">
+{/* Content */}
+        <div 
+          ref={contentRef}
+          className="flex-1 overflow-y-auto p-6 scroll-smooth relative"
+          onScroll={(e) => {
+            const scrollTop = e.target.scrollTop;
+            setShowScrollTop(scrollTop > 200);
+          }}
+        >
           {loading ? (
             <div className="flex items-center justify-center py-12">
               <Loading type="templates" />
@@ -199,11 +215,34 @@ const TemplateGallery = ({ isOpen, onClose, onSelectTemplate }) => {
                     </div>
                   </motion.div>
                 ))}
-              </AnimatePresence>
+</AnimatePresence>
             </div>
           )}
+          
+          {/* Scroll to Top Button */}
+          <AnimatePresence>
+            {showScrollTop && (
+              <motion.button
+                initial={{ opacity: 0, scale: 0.8 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.8 }}
+                onClick={() => {
+                  if (contentRef.current) {
+                    contentRef.current.scrollTo({
+                      top: 0,
+                      behavior: 'smooth'
+                    });
+                  }
+                }}
+                className="fixed bottom-6 right-6 bg-primary hover:bg-primary/80 text-white p-3 rounded-full shadow-lg transition-colors z-10"
+                whileHover={{ scale: 1.1 }}
+                whileTap={{ scale: 0.9 }}
+              >
+                <ApperIcon name="ChevronUp" size={20} />
+              </motion.button>
+            )}
+          </AnimatePresence>
         </div>
-
         {/* Footer */}
         <div className="p-6 border-t border-slate-600/50 bg-surface/30">
           <div className="flex items-center justify-between">
