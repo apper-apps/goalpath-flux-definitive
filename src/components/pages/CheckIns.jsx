@@ -1,8 +1,8 @@
-import React, { useCallback, useEffect, useState } from "react";
-import { motion } from "framer-motion";
-import { List } from "react-window";
-import useMeasure from "react-use-measure";
-import { useStreak } from "@/hooks/useStreak";
+import React, { useCallback, useEffect, useState } from 'react'
+import { motion } from 'framer-motion'
+import { FixedSizeList as List } from "react-window";
+import useMeasure from 'react-use-measure'
+import { useStreak } from '@/hooks/useStreak'
 import { eachDayOfInterval, endOfWeek, format, startOfWeek } from "date-fns";
 import { toast } from "react-toastify";
 import ApperIcon from "@/components/ApperIcon";
