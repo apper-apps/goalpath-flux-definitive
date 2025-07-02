@@ -1,6 +1,7 @@
-import { useState, useEffect } from 'react';
-import { checkInService } from '@/services/api/checkInService';
-import { format, differenceInDays } from 'date-fns';
+import { useEffect, useState } from "react";
+import { differenceInDays, format } from "date-fns";
+import { notificationService } from "@/services/api/notificationService";
+import { checkInService } from "@/services/api/checkInService";
 
 export const useStreak = () => {
   const [streak, setStreak] = useState(0);
@@ -88,11 +89,45 @@ export const useStreak = () => {
         maxStreak = Math.max(maxStreak, tempStreak);
       }
       
-      setStreak(currentStreak);
+setStreak(currentStreak);
       setLongestStreak(maxStreak);
+      
+      // Generate contextual nudges based on streak progress
+      await generateStreakNudge(currentStreak, maxStreak);
       
     } catch (error) {
       console.error('Failed to calculate streak:', error);
+    }
+  };
+
+  const generateStreakNudge = async (currentStreak, longestStreak) => {
+    try {
+      const { notificationService } = await import('@/services/api/notificationService');
+      
+      // Generate nudges for significant streak milestones
+      if (currentStreak > 0 && (currentStreak % 7 === 0 || currentStreak % 30 === 0)) {
+        await notificationService.generateNudge({
+          type: 'streak_milestone',
+          streak: currentStreak,
+          longestStreak: longestStreak,
+          context: 'streak_achievement'
+        });
+      }
+      
+      // Encourage streak maintenance
+      if (currentStreak > 0 && currentStreak < longestStreak) {
+        const progressToRecord = Math.round((currentStreak / longestStreak) * 100);
+        if (progressToRecord >= 70) {
+          await notificationService.generateNudge({
+            type: 'streak_encouragement',
+            streak: currentStreak,
+            progressToRecord,
+            context: 'streak_recovery'
+          });
+        }
+      }
+    } catch (error) {
+      console.error('Failed to generate streak nudge:', error);
     }
   };
   
