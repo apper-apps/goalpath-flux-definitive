@@ -57,9 +57,9 @@ const Sidebar = ({ isOpen, onToggle }) => {
               <div className="w-10 h-10 rounded-lg bg-gradient-primary flex items-center justify-center">
                 <ApperIcon name="Target" size={24} className="text-white" />
               </div>
-              <div>
+<div>
                 <h1 className="text-xl font-display font-bold gradient-text">
-                  GoalPath AI
+                  MyGoals
                 </h1>
                 <p className="text-xs text-slate-400">Smart Goal Tracking</p>
               </div>
