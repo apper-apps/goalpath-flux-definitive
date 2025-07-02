@@ -112,7 +112,7 @@ return (
                 : templates.filter(template => template.category === category.value).length;
               
               return (
-                <Button
+<Button
                   key={category.value}
                   variant={activeCategory === category.value ? "primary" : "ghost"}
                   size="sm"
@@ -126,7 +126,9 @@ return (
                       });
                     }
                   }}
-                  className="flex items-center gap-2 whitespace-nowrap"
+                  className={`flex items-center gap-2 whitespace-nowrap ${
+                    activeCategory === category.value ? 'text-white' : ''
+                  }`}
                 >
                   <ApperIcon name={category.icon} size={16} />
                   {category.label}
