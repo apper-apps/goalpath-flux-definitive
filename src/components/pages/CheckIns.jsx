@@ -1,16 +1,17 @@
-import React, { useEffect, useState, useCallback } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { motion } from "framer-motion";
-import { FixedSizeList as List } from "react-window";
-import StatCard from "@/components/molecules/StatCard";
-import Button from "@/components/atoms/Button";
-import ApperIcon from "@/components/ApperIcon";
-import Loading from "@/components/ui/Loading";
-import Error from "@/components/ui/Error";
-import Empty from "@/components/ui/Empty";
-import { checkInService } from "@/services/api/checkInService";
+import { List } from "react-window";
+import useMeasure from "react-use-measure";
 import { useStreak } from "@/hooks/useStreak";
 import { eachDayOfInterval, endOfWeek, format, startOfWeek } from "date-fns";
 import { toast } from "react-toastify";
+import ApperIcon from "@/components/ApperIcon";
+import Button from "@/components/atoms/Button";
+import StatCard from "@/components/molecules/StatCard";
+import Error from "@/components/ui/Error";
+import Empty from "@/components/ui/Empty";
+import Loading from "@/components/ui/Loading";
+import { checkInService } from "@/services/api/checkInService";
 
 const CheckIns = () => {
   const [checkIns, setCheckIns] = useState([]);
@@ -19,6 +20,7 @@ const CheckIns = () => {
   const [selectedPeriod, setSelectedPeriod] = useState('week');
   const [displayCount, setDisplayCount] = useState(10);
   const [hasMore, setHasMore] = useState(false);
+  const [containerRef, containerBounds] = useMeasure();
   
   const { streak } = useStreak();
 const loadCheckIns = async () => {
@@ -166,23 +168,23 @@ const loadCheckIns = async () => {
   const weekData = getWeekData();
   
 return (
-    <div className="p-4 space-y-4">
+    <div ref={containerRef} className="p-3 sm:p-4 space-y-3 sm:space-y-4">
       {/* Header */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         className="text-center"
       >
-        <h1 className="text-3xl font-display font-bold gradient-text mb-2">
+        <h1 className="text-2xl sm:text-3xl font-display font-bold gradient-text mb-1 sm:mb-2">
           Check-in History 📊
         </h1>
-        <p className="text-slate-400">
+        <p className="text-slate-400 text-sm sm:text-base">
           Track your daily progress and mood correlations
         </p>
       </motion.div>
       
 {/* Stats */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-2 sm:gap-4">
         <StatCard
           title="Current Streak"
           value={`${streak} days`}
@@ -228,24 +230,30 @@ icon="CheckCircle2"
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="bg-gradient-surface rounded-xl p-4 border border-slate-600/50"
+            className="bg-gradient-surface rounded-xl p-3 sm:p-4 border border-slate-600/50"
           >
-            <div className="flex items-center justify-between mb-4">
-              <h2 className="text-xl font-display font-bold text-white">
+            <div className="flex items-center justify-between mb-3 sm:mb-4">
+              <h2 className="text-lg sm:text-xl font-display font-bold text-white">
                 This Week
               </h2>
-              <div className="flex items-center gap-2 text-sm text-slate-400">
-                <ApperIcon name="Calendar" size={14} />
-                {format(weekData[0].date, 'MMM d')} - {format(weekData[6].date, 'MMM d')}
+              <div className="flex items-center gap-1 sm:gap-2 text-xs sm:text-sm text-slate-400">
+                <ApperIcon name="Calendar" size={12} className="sm:hidden" />
+                <ApperIcon name="Calendar" size={14} className="hidden sm:block" />
+                <span className="hidden sm:inline">
+                  {format(weekData[0].date, 'MMM d')} - {format(weekData[6].date, 'MMM d')}
+                </span>
+                <span className="sm:hidden">
+                  {format(weekData[0].date, 'M/d')} - {format(weekData[6].date, 'M/d')}
+                </span>
               </div>
             </div>
             
-<div className="grid grid-cols-7 gap-3">
+<div className="grid grid-cols-7 gap-1 sm:gap-3">
               {weekData.map((day, index) => (
                 <div
                   key={index}
                   className={`
-                    aspect-square rounded-lg border-2 flex flex-col items-center justify-center p-2 transition-all duration-200
+                    aspect-square rounded-lg border-2 flex flex-col items-center justify-center p-1 sm:p-2 transition-all duration-200
                     ${day.hasCheckIn 
                       ? 'border-success bg-success/10 text-success' 
                       : format(day.date, 'yyyy-MM-dd') === format(new Date(), 'yyyy-MM-dd')
@@ -254,19 +262,23 @@ icon="CheckCircle2"
                     }
                   `}
                 >
-                  <div className="text-xs font-medium">
-                    {format(day.date, 'EEE')}
+                  <div className="text-xs font-medium truncate">
+                    <span className="sm:hidden">{format(day.date, 'EEEEEE')}</span>
+                    <span className="hidden sm:inline">{format(day.date, 'EEE')}</span>
                   </div>
-                  <div className="text-sm font-bold">
+                  <div className="text-xs sm:text-sm font-bold">
                     {format(day.date, 'd')}
                   </div>
                   {day.checkIn && (
-                    <div className="text-sm">
+                    <div className="text-xs sm:text-sm">
                       {moodEmojis[day.checkIn.mood - 1]}
                     </div>
                   )}
-                  {day.hasCheckIn && (
-                    <ApperIcon name="CheckCircle" size={10} className="mt-0.5" />
+{day.hasCheckIn && (
+                    <>
+                      <ApperIcon name="CheckCircle" size={8} className="mt-0.5 sm:hidden" />
+                      <ApperIcon name="CheckCircle" size={10} className="mt-0.5 hidden sm:block" />
+                    </>
                   )}
                 </div>
               ))}
@@ -277,23 +289,23 @@ icon="CheckCircle2"
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="bg-gradient-surface rounded-xl p-4 border border-slate-600/50"
+            className="bg-gradient-surface rounded-xl p-3 sm:p-4 border border-slate-600/50"
           >
-            <div className="flex items-center justify-between mb-4">
-              <h2 className="text-xl font-display font-bold text-white">
+            <div className="flex items-center justify-between mb-3 sm:mb-4">
+              <h2 className="text-lg sm:text-xl font-display font-bold text-white">
                 Recent Check-ins
               </h2>
-              <span className="text-sm text-slate-400">
+              <span className="text-xs sm:text-sm text-slate-400">
                 {Math.min(displayCount, checkIns.length)} of {checkIns.length}
               </span>
             </div>
             
-            {checkIns.length > 0 && (
-              <div className="h-80">
+{checkIns.length > 0 && (
+              <div className="h-64 sm:h-80">
                 <List
-                  height={320}
+                  height={containerBounds.height > 600 ? Math.min(320, containerBounds.height - 280) : 256}
                   itemCount={Math.min(displayCount, checkIns.length)}
-                  itemSize={80}
+                  itemSize={window.innerWidth < 640 ? 70 : 80}
                   itemData={checkIns}
                 >
                   {CheckInItem}
@@ -301,14 +313,19 @@ icon="CheckCircle2"
               </div>
             )}
             
-            {hasMore && (
-              <div className="mt-4 text-center">
+{hasMore && (
+              <div className="mt-3 sm:mt-4 text-center">
                 <Button 
                   variant="secondary" 
                   size="sm"
                   onClick={loadMore}
                 >
-                  Load More ({checkIns.length - displayCount} remaining)
+                  <span className="hidden sm:inline">
+                    Load More ({checkIns.length - displayCount} remaining)
+                  </span>
+                  <span className="sm:hidden">
+                    Load More ({checkIns.length - displayCount})
+                  </span>
                 </Button>
               </div>
             )}
