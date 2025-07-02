@@ -6,8 +6,8 @@ import CheckInModal from '@/components/molecules/CheckInModal';
 import { useStreak } from '@/hooks/useStreak';
 import { useGoals } from '@/hooks/useGoals';
 import { checkInService } from '@/services/api/checkInService';
+import { notificationService } from '@/services/api/notificationService';
 import { toast } from 'react-toastify';
-
 const Layout = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [checkInModalOpen, setCheckInModalOpen] = useState(false);

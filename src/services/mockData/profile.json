@@ -1,0 +1,26 @@
+{
+  "Id": 1,
+  "firstName": "Alex",
+  "lastName": "Johnson",
+  "email": "alex.johnson@example.com",
+  "phone": "+1 (555) 123-4567",
+  "bio": "Passionate about personal growth and achieving meaningful goals. I believe in the power of consistent small steps to create lasting change.",
+  "memberSince": "January 2024",
+  "createdAt": "2024-01-01T00:00:00Z",
+  "updatedAt": "2024-01-15T10:30:00Z",
+  "preferences": {
+    "timezone": "America/New_York",
+    "language": "en",
+    "emailNotifications": true,
+    "pushNotifications": true,
+    "weeklyReports": true,
+    "theme": "dark"
+  },
+  "stats": {
+    "totalGoals": 12,
+    "completedGoals": 8,
+    "currentStreak": 15,
+    "totalCheckIns": 45,
+    "averageCompletionRate": 85
+  }
+}

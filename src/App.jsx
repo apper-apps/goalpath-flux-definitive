@@ -6,8 +6,8 @@ import Dashboard from '@/components/pages/Dashboard';
 import Goals from '@/components/pages/Goals';
 import GoalDetail from '@/components/pages/GoalDetail';
 import CheckIns from '@/components/pages/CheckIns';
+import Profile from '@/components/pages/Profile';
 import Settings from '@/components/pages/Settings';
-
 function App() {
   return (
     <div className="App">
@@ -15,8 +15,9 @@ function App() {
         <Route path="/" element={<Layout />}>
           <Route index element={<Dashboard />} />
           <Route path="goals" element={<Goals />} />
-          <Route path="goals/:id" element={<GoalDetail />} />
+<Route path="goals/:id" element={<GoalDetail />} />
           <Route path="check-ins" element={<CheckIns />} />
+          <Route path="profile" element={<Profile />} />
           <Route path="settings" element={<Settings />} />
         </Route>
       </Routes>

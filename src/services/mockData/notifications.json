@@ -1,0 +1,47 @@
+[
+  {
+    "Id": 1,
+    "title": "Goal Milestone Reached!",
+    "message": "You've completed 50% of your 'Learn React' goal. Keep up the great work!",
+    "type": "achievement",
+    "read": false,
+    "createdAt": "2024-01-15T10:30:00Z",
+    "goalId": 1
+  },
+  {
+    "Id": 2,
+    "title": "Daily Check-in Reminder",
+    "message": "Don't forget to log your progress today to maintain your streak!",
+    "type": "reminder",
+    "read": false,
+    "createdAt": "2024-01-15T09:00:00Z",
+    "goalId": null
+  },
+  {
+    "Id": 3,
+    "title": "New Goal Template Available",
+    "message": "Check out the new 'Fitness Journey' template in the goal gallery.",
+    "type": "system",
+    "read": true,
+    "createdAt": "2024-01-14T16:45:00Z",
+    "goalId": null
+  },
+  {
+    "Id": 4,
+    "title": "Weekly Progress Summary",
+    "message": "You completed 3 out of 5 planned activities this week. Review your progress.",
+    "type": "goal",
+    "read": true,
+    "createdAt": "2024-01-14T08:00:00Z",
+    "goalId": 2
+  },
+  {
+    "Id": 5,
+    "title": "Streak Achievement Unlocked!",
+    "message": "Congratulations! You've maintained a 7-day check-in streak. Amazing dedication!",
+    "type": "achievement",
+    "read": false,
+    "createdAt": "2024-01-13T20:15:00Z",
+    "goalId": null
+  }
+]

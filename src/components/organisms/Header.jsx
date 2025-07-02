@@ -1,10 +1,69 @@
-import React from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useLocation } from 'react-router-dom';
+import { motion, AnimatePresence } from 'framer-motion';
+import useClickOutside from 'react-use-click-outside';
 import Button from '@/components/atoms/Button';
 import ApperIcon from '@/components/ApperIcon';
+import { notificationService } from '@/services/api/notificationService';
+import { toast } from 'react-toastify';
 
 const Header = ({ onMenuToggle, onCheckIn, streak = 0 }) => {
-  const location = useLocation();
+const location = useLocation();
+  const [notifications, setNotifications] = useState([]);
+  const [notificationDropdownOpen, setNotificationDropdownOpen] = useState(false);
+  const [notificationLoading, setNotificationLoading] = useState(false);
+  const [unreadCount, setUnreadCount] = useState(0);
+  const notificationRef = useRef(null);
+  
+  useClickOutside(notificationRef, () => {
+    setNotificationDropdownOpen(false);
+  });
+  
+  useEffect(() => {
+    loadNotifications();
+  }, []);
+  
+  const loadNotifications = async () => {
+    try {
+      setNotificationLoading(true);
+      const data = await notificationService.getAll();
+      setNotifications(data);
+      setUnreadCount(data.filter(n => !n.read).length);
+    } catch (error) {
+      toast.error('Failed to load notifications');
+    } finally {
+      setNotificationLoading(false);
+    }
+  };
+  
+  const handleNotificationClick = () => {
+    setNotificationDropdownOpen(!notificationDropdownOpen);
+  };
+  
+  const handleMarkAsRead = async (notificationId) => {
+    try {
+      await notificationService.markAsRead(notificationId);
+      setNotifications(prev => 
+        prev.map(n => n.Id === notificationId ? { ...n, read: true } : n)
+      );
+      setUnreadCount(prev => Math.max(0, prev - 1));
+      toast.success('Notification marked as read');
+    } catch (error) {
+      toast.error('Failed to mark notification as read');
+    }
+  };
+  
+  const handleMarkAllAsRead = async () => {
+    try {
+      const unreadNotifications = notifications.filter(n => !n.read);
+      await Promise.all(unreadNotifications.map(n => notificationService.markAsRead(n.Id)));
+      setNotifications(prev => prev.map(n => ({ ...n, read: true })));
+      setUnreadCount(0);
+      toast.success('All notifications marked as read');
+    } catch (error) {
+      toast.error('Failed to mark all notifications as read');
+    }
+  };
   
   const getPageTitle = () => {
     switch (location.pathname) {
@@ -15,7 +74,9 @@ const Header = ({ onMenuToggle, onCheckIn, streak = 0 }) => {
       case '/check-ins':
         return 'Check-ins';
       case '/settings':
-        return 'Settings';
+return 'Settings';
+      case '/profile':
+        return 'Profile';
       default:
         if (location.pathname.startsWith('/goals/')) {
           return 'Goal Details';
@@ -23,7 +84,6 @@ const Header = ({ onMenuToggle, onCheckIn, streak = 0 }) => {
         return 'GoalPath AI';
     }
   };
-  
   const getPageDescription = () => {
     switch (location.pathname) {
       case '/':
@@ -33,7 +93,9 @@ const Header = ({ onMenuToggle, onCheckIn, streak = 0 }) => {
       case '/check-ins':
         return 'Daily progress tracking and mood correlation';
       case '/settings':
-        return 'Customize your goal tracking experience';
+return 'Customize your goal tracking experience';
+      case '/profile':
+        return 'Manage your account and preferences';
       default:
         if (location.pathname.startsWith('/goals/')) {
           return 'View milestones and track progress';
@@ -41,7 +103,6 @@ const Header = ({ onMenuToggle, onCheckIn, streak = 0 }) => {
         return 'Smart goal tracking with AI assistance';
     }
   };
-  
   return (
     <header className="bg-gradient-surface border-b border-slate-600/50 px-6 py-4">
       <div className="flex items-center justify-between">
@@ -81,15 +142,107 @@ const Header = ({ onMenuToggle, onCheckIn, streak = 0 }) => {
             <span className="hidden sm:inline">Quick Check-in</span>
           </Button>
           
-          {/* Notifications */}
-          <Button
-            variant="ghost"
-            size="md"
-            className="p-2 relative"
-          >
-            <ApperIcon name="Bell" size={20} />
-            <span className="absolute -top-1 -right-1 w-3 h-3 bg-accent rounded-full"></span>
-          </Button>
+{/* Notifications */}
+          <div className="relative" ref={notificationRef}>
+            <Button
+              variant="ghost"
+              size="md"
+              className="p-2 relative"
+              onClick={handleNotificationClick}
+            >
+              <ApperIcon name="Bell" size={20} />
+              {unreadCount > 0 && (
+                <span className="absolute -top-1 -right-1 w-5 h-5 bg-accent rounded-full flex items-center justify-center text-xs text-white font-medium">
+                  {unreadCount > 9 ? '9+' : unreadCount}
+                </span>
+              )}
+            </Button>
+            
+            <AnimatePresence>
+              {notificationDropdownOpen && (
+                <motion.div
+                  initial={{ opacity: 0, y: -10, scale: 0.95 }}
+                  animate={{ opacity: 1, y: 0, scale: 1 }}
+                  exit={{ opacity: 0, y: -10, scale: 0.95 }}
+                  transition={{ duration: 0.2 }}
+                  className="absolute right-0 top-full mt-2 w-80 bg-slate-800 border border-slate-600 rounded-xl shadow-2xl z-50 max-h-96 overflow-hidden"
+                >
+                  <div className="p-4 border-b border-slate-600 flex items-center justify-between">
+                    <h3 className="text-lg font-semibold text-white">Notifications</h3>
+                    {unreadCount > 0 && (
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={handleMarkAllAsRead}
+                        className="text-xs text-primary hover:text-primary-light"
+                      >
+                        Mark all as read
+                      </Button>
+                    )}
+                  </div>
+                  
+                  <div className="max-h-80 overflow-y-auto">
+                    {notificationLoading ? (
+                      <div className="p-4 text-center">
+                        <div className="animate-spin w-6 h-6 border-2 border-primary border-t-transparent rounded-full mx-auto"></div>
+                        <p className="text-slate-400 text-sm mt-2">Loading notifications...</p>
+                      </div>
+                    ) : notifications.length === 0 ? (
+                      <div className="p-6 text-center">
+                        <ApperIcon name="Bell" size={32} className="text-slate-600 mx-auto mb-2" />
+                        <p className="text-slate-400">No notifications yet</p>
+                      </div>
+                    ) : (
+                      <div className="divide-y divide-slate-600">
+                        {notifications.map((notification) => (
+                          <div
+                            key={notification.Id}
+                            className={`p-4 hover:bg-slate-700/50 transition-colors cursor-pointer ${
+                              !notification.read ? 'bg-primary/5 border-l-2 border-l-primary' : ''
+                            }`}
+                            onClick={() => !notification.read && handleMarkAsRead(notification.Id)}
+                          >
+                            <div className="flex items-start gap-3">
+                              <div className={`w-8 h-8 rounded-full flex items-center justify-center ${
+                                notification.type === 'achievement' ? 'bg-accent/20' :
+                                notification.type === 'goal' ? 'bg-primary/20' :
+                                notification.type === 'reminder' ? 'bg-yellow-500/20' :
+                                'bg-slate-600'
+                              }`}>
+                                <ApperIcon 
+                                  name={
+                                    notification.type === 'achievement' ? 'Trophy' :
+                                    notification.type === 'goal' ? 'Target' :
+                                    notification.type === 'reminder' ? 'Clock' :
+                                    'Info'
+                                  } 
+                                  size={16} 
+                                  className={
+                                    notification.type === 'achievement' ? 'text-accent' :
+                                    notification.type === 'goal' ? 'text-primary' :
+                                    notification.type === 'reminder' ? 'text-yellow-500' :
+                                    'text-slate-400'
+                                  }
+                                />
+                              </div>
+                              <div className="flex-1 min-w-0">
+                                <p className="text-white text-sm font-medium">{notification.title}</p>
+                                <p className="text-slate-400 text-xs mt-1">{notification.message}</p>
+                                <p className="text-slate-500 text-xs mt-1">{notification.createdAt}</p>
+                              </div>
+                              {!notification.read && (
+                                <div className="w-2 h-2 bg-primary rounded-full mt-2"></div>
+                              )}
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </div>
         </div>
       </div>
     </header>

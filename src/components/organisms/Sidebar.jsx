@@ -25,6 +25,12 @@ const Sidebar = ({ isOpen, onToggle }) => {
       icon: 'CheckCircle2',
       description: 'Daily progress tracking'
     },
+{
+      path: '/profile',
+      name: 'Profile',
+      icon: 'User',
+      description: 'Account & preferences'
+    },
     {
       path: '/settings',
       name: 'Settings',
