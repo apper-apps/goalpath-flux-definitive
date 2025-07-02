@@ -129,10 +129,13 @@ return (
                   className={`flex items-center gap-2 whitespace-nowrap ${
                     activeCategory === category.value ? 'text-white' : ''
                   }`}
-                >
+>
                   <ApperIcon name={category.icon} size={16} />
                   {category.label}
-                  <Badge variant="secondary" className="ml-1">
+                  <Badge 
+                    variant={activeCategory === category.value ? "primary" : "secondary"} 
+                    className="ml-1"
+                  >
                     {categoryCount}
                   </Badge>
                 </Button>
