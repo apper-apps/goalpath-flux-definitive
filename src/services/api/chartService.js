@@ -91,6 +91,92 @@ class ChartService {
       console.error('Error generating mood correlation data:', error);
       throw new Error('Failed to generate mood correlation data');
     }
+}
+
+  async getMilestoneAnalytics({ goalId = null, startDate, endDate, milestoneFilter = 'all' }) {
+    await this.delay();
+    
+    try {
+      const [goals, checkIns, allMilestones] = await Promise.all([
+        goalService.getAll(),
+        checkInService.getAll(),
+        milestoneService.getAll()
+      ]);
+
+      // Filter goals if specific goal selected
+      const targetGoals = goalId ? goals.filter(g => g.Id === goalId) : goals;
+      const targetGoalIds = targetGoals.map(g => g.Id);
+      
+      // Get milestones for target goals within date range
+      let milestones = allMilestones.filter(milestone => {
+        if (!targetGoalIds.includes(milestone.goalId)) return false;
+        
+        // Filter by completion status
+        if (milestoneFilter === 'completed' && !milestone.completed) return false;
+        if (milestoneFilter === 'pending' && milestone.completed) return false;
+        
+        // For completed milestones, check if completed within date range
+        if (milestone.completed && milestone.completedAt) {
+          const completedDate = parseISO(milestone.completedAt);
+          return isWithinInterval(completedDate, {
+            start: parseISO(startDate),
+            end: parseISO(endDate)
+          });
+        }
+        
+        // For pending milestones, check if due date is within range
+        if (!milestone.completed && milestone.dueDate) {
+          const dueDate = parseISO(milestone.dueDate);
+          return isWithinInterval(dueDate, {
+            start: parseISO(startDate),
+            end: parseISO(endDate)
+          });
+        }
+        
+        return false;
+      });
+
+      // Analyze mood impact around milestone completion
+      const analytics = [];
+      
+      for (const milestone of milestones) {
+        if (!milestone.completed || !milestone.completedAt) continue;
+        
+        const completionDate = parseISO(milestone.completedAt);
+        
+        // Find check-ins within 7 days before and after completion
+        const relevantCheckIns = checkIns.filter(checkIn => {
+          const checkInDate = parseISO(checkIn.date);
+          const daysDiff = Math.abs((checkInDate - completionDate) / (1000 * 60 * 60 * 24));
+          return daysDiff <= 7;
+        });
+        
+        // Calculate mood impact around completion
+        for (const checkIn of relevantCheckIns) {
+          const checkInDate = parseISO(checkIn.date);
+          const daysFromCompletion = Math.round((checkInDate - completionDate) / (1000 * 60 * 60 * 24));
+          
+          analytics.push({
+            milestoneId: milestone.Id,
+            milestoneTitle: milestone.title,
+            goalId: milestone.goalId,
+            completedAt: milestone.completedAt,
+            daysFromCompletion,
+            moodImpact: checkIn.mood,
+            checkInDate: checkIn.date
+          });
+        }
+      }
+      
+      // Sort by days from completion
+      analytics.sort((a, b) => a.daysFromCompletion - b.daysFromCompletion);
+      
+      return analytics;
+      
+    } catch (error) {
+      console.error('Error generating milestone analytics:', error);
+      throw new Error('Failed to generate milestone analytics');
+    }
   }
 
   delay(ms = 200) {
