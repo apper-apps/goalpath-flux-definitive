@@ -232,13 +232,12 @@ return 'Customize your goal tracking experience';
                         <div className="animate-spin w-6 h-6 border-2 border-primary border-t-transparent rounded-full mx-auto"></div>
                         <p className="text-slate-400 text-sm mt-2">Loading notifications...</p>
                       </div>
-                    ) : (notifications.length === 0 && nudges.length === 0) ? (
+) : (notifications.length === 0 && nudges.length === 0) ? (
                       <div className="p-6 text-center">
                         <ApperIcon name="Bell" size={32} className="text-slate-600 mx-auto mb-2" />
                         <p className="text-slate-400">No notifications yet</p>
                       </div>
                     ) : (
-) : (
                       <div className="divide-y divide-slate-600">
                         {/* Display Nudges First */}
                         {nudges.map((nudge, index) => (
