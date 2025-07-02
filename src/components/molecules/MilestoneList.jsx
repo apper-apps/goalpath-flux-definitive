@@ -1,9 +1,17 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { motion } from "framer-motion";
-import { format } from "date-fns";
+import { format, isWeekend } from "date-fns";
 import ApperIcon from "@/components/ApperIcon";
+import { milestoneService } from "@/services/api/milestoneService";
 
-const MilestoneList = ({ milestones, onToggle, showCheckboxes = true }) => {
+const MilestoneList = ({ milestones, onToggle, showCheckboxes = true, goalId }) => {
+  // Track behavioral context when milestones are rendered
+  useEffect(() => {
+    if (milestones && milestones.length > 0 && goalId) {
+      milestoneService.trackMilestoneViewing(goalId, milestones);
+    }
+  }, [milestones, goalId]);
+
   if (!milestones || milestones.length === 0) {
     return (
       <div className="text-center py-8 text-slate-400">
@@ -31,27 +39,43 @@ const MilestoneList = ({ milestones, onToggle, showCheckboxes = true }) => {
         >
 {showCheckboxes && (
             <button
-              onClick={() => {
+onClick={async () => {
+                // Track behavioral context before completion
+                const completionContext = {
+                  isWeekend: isWeekend(new Date()),
+                  timeOfDay: new Date().getHours(),
+                  daysSinceCreated: Math.floor((new Date() - new Date(milestone.createdAt)) / (1000 * 60 * 60 * 24))
+                };
+
                 onToggle(milestone.Id);
-if (!milestone.completed) {
-                  // Trigger celebration for milestone completion
+                
+                if (!milestone.completed) {
+                  // Record completion behavior for future pacing
+                  await milestoneService.recordCompletionBehavior(
+                    milestone.Id, 
+                    goalId, 
+                    completionContext
+                  );
+                  
+// Trigger celebration for milestone completion
                   setTimeout(() => {
-                    const event = typeof CustomEvent !== 'undefined' 
-                      ? new CustomEvent('milestone-completed', {
-                          detail: {
-                            type: 'milestone',
-                            title: milestone.title,
-                            message: `🎉 Milestone completed: ${milestone.title}!`
-                          }
-                        })
-                      : new Event('milestone-completed');
-                    
-                    if (typeof CustomEvent === 'undefined' && event.detail === undefined) {
-                      event.detail = {
+                    let event;
+                    try {
+                      event = new CustomEvent('milestone-completed', {
+                        detail: {
+                          type: 'milestone',
+                          title: milestone.title,
+                          message: `🎉 Milestone completed: ${milestone.title}!`
+                        }
+                      });
+                    } catch (e) {
+                      // Fallback for older browsers
+                      event = document.createEvent('CustomEvent');
+                      event.initCustomEvent('milestone-completed', false, false, {
                         type: 'milestone',
                         title: milestone.title,
                         message: `🎉 Milestone completed: ${milestone.title}!`
-                      };
+                      });
                     }
                     
                     window.dispatchEvent(event);
@@ -96,23 +120,52 @@ if (!milestone.completed) {
                 </span>
               )}
             </div>
-          </div>
+</div>
           
-          <div className={`
-            flex-shrink-0 text-xs px-2 py-1 rounded-full
-            ${milestone.completed 
-              ? 'bg-success/20 text-success' 
-              : new Date(milestone.dueDate) < new Date()
-                ? 'bg-error/20 text-error'
-                : 'bg-primary/20 text-primary'
-            }
-          `}>
-            {milestone.completed 
-              ? 'Complete' 
-              : new Date(milestone.dueDate) < new Date()
-                ? 'Overdue'
-                : 'Pending'
-            }
+          <div className="flex flex-col items-end gap-1">
+            <div className={`
+              flex-shrink-0 text-xs px-2 py-1 rounded-full
+              ${milestone.completed 
+                ? 'bg-success/20 text-success' 
+                : new Date(milestone.dueDate) < new Date()
+                  ? 'bg-error/20 text-error'
+                  : 'bg-primary/20 text-primary'
+              }
+            `}>
+              {milestone.completed 
+                ? 'Complete' 
+                : new Date(milestone.dueDate) < new Date()
+                  ? 'Overdue'
+                  : 'Pending'
+              }
+            </div>
+            
+            {/* Show context-aware difficulty indicator */}
+            {milestone.difficulty && (
+              <div className={`
+                text-xs px-2 py-0.5 rounded-full flex items-center gap-1
+                ${milestone.difficulty === 'light' 
+                  ? 'bg-green-500/20 text-green-400' 
+                  : milestone.difficulty === 'moderate'
+                    ? 'bg-yellow-500/20 text-yellow-400'
+                    : 'bg-red-500/20 text-red-400'
+                }
+              `}>
+                <ApperIcon 
+                  name={milestone.difficulty === 'light' ? 'Feather' : milestone.difficulty === 'moderate' ? 'Activity' : 'Zap'} 
+                  size={10} 
+                />
+                {milestone.difficulty}
+              </div>
+            )}
+            
+            {/* Weekend-friendly indicator */}
+            {milestone.weekendFriendly && isWeekend(new Date()) && (
+              <div className="text-xs px-2 py-0.5 rounded-full bg-blue-500/20 text-blue-400 flex items-center gap-1">
+                <ApperIcon name="Coffee" size={10} />
+                Weekend-friendly
+              </div>
+            )}
           </div>
         </motion.div>
       ))}

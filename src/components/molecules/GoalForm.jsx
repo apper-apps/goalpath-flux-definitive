@@ -80,14 +80,38 @@ const GoalForm = ({
     }
   };
   
-  const generateAIMilestones = () => {
+const generateAIMilestones = async () => {
     setShowAISuggestions(true);
-    // Simulate AI processing
-    setTimeout(() => {
+    
+    try {
+      // Import milestone service for context-aware generation
+      const { milestoneService } = await import('@/services/api/milestoneService');
+      
+      // Generate context-aware milestones based on user behavior
+      const contextAwareMilestones = await milestoneService.generateContextAwareMilestones({
+        goalTitle: formData.title,
+        goalDescription: formData.description,
+        category: formData.category,
+        targetDate: formData.targetDate,
+        userPreferences: {
+          preferredDifficulty: 'adaptive', // Will adapt based on user history
+          weekendTaskPreference: 'lighter', // Prefer lighter tasks on weekends
+          pacingStyle: 'consistent' // Can be 'aggressive', 'consistent', or 'relaxed'
+        }
+      });
+      
+      console.log('Generated context-aware milestones:', contextAwareMilestones);
+      
+      // Simulate processing time for better UX
+      setTimeout(() => {
+        setShowAISuggestions(false);
+      }, 1500);
+      
+    } catch (error) {
+      console.error('Error generating context-aware milestones:', error);
       setShowAISuggestions(false);
-    }, 2000);
+    }
   };
-  
   return (
     <motion.form
       initial={{ opacity: 0, y: 20 }}
@@ -181,10 +205,25 @@ const GoalForm = ({
             >
               Generate Milestones
             </Button>
-          </div>
-          <p className="text-slate-400 text-sm">
-            Let AI break down your goal into actionable milestones with suggested timelines.
+</div>
+          <p className="text-slate-400 text-sm mb-3">
+            Generate smart milestones that adapt to your completion patterns and suggest lighter tasks for weekends.
           </p>
+          
+          <div className="flex flex-wrap gap-2 text-xs">
+            <div className="flex items-center gap-1 px-2 py-1 bg-blue-500/10 text-blue-400 rounded-full">
+              <ApperIcon name="Brain" size={12} />
+              Behavioral Learning
+            </div>
+            <div className="flex items-center gap-1 px-2 py-1 bg-green-500/10 text-green-400 rounded-full">
+              <ApperIcon name="Coffee" size={12} />
+              Weekend-Friendly
+            </div>
+            <div className="flex items-center gap-1 px-2 py-1 bg-purple-500/10 text-purple-400 rounded-full">
+              <ApperIcon name="TrendingUp" size={12} />
+              Adaptive Pacing
+            </div>
+          </div>
         </motion.div>
       )}
       <div className="flex gap-3 pt-6 border-t border-slate-600">
