@@ -9,6 +9,7 @@ import ApperIcon from '@/components/ApperIcon';
 import Loading from '@/components/ui/Loading';
 import Error from '@/components/ui/Error';
 import Empty from '@/components/ui/Empty';
+import MoodCorrelationChart from '@/components/molecules/MoodCorrelationChart';
 import { useGoals } from '@/hooks/useGoals';
 import { useDashboardStats } from '@/hooks/useDashboardStats';
 
@@ -152,12 +153,23 @@ className="text-center"
           </div>
         )}
       </div>
-      
+{/* Mood Correlation Chart */}
+      {goals.length > 0 && (
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.4 }}
+        >
+          <MoodCorrelationChart />
+        </motion.div>
+      )}
+
       {/* Quick Actions */}
       {goals.length > 0 && (
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.5 }}
           className="bg-gradient-surface rounded-xl p-6 border border-slate-600/50"
         >
           <h3 className="text-xl font-display font-semibold text-white mb-4">
