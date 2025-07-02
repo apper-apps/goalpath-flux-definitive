@@ -33,15 +33,26 @@ class GoalService {
     return { ...newGoal };
   }
   
-  async update(id, goalData) {
+async update(id, goalData) {
     await this.delay();
     const index = this.goals.findIndex(g => g.Id === id);
     if (index === -1) {
       throw new Error('Goal not found');
     }
     
+    const oldGoal = { ...this.goals[index] };
     this.goals[index] = { ...this.goals[index], ...goalData };
-    return { ...this.goals[index] };
+    
+    // Check if goal just completed (progress reached 100% or status changed to completed)
+    const justCompleted = (
+      (oldGoal.progress < 100 && this.goals[index].progress >= 100) ||
+      (oldGoal.status !== 'completed' && this.goals[index].status === 'completed')
+    );
+    
+    return { 
+      ...this.goals[index], 
+      justCompleted 
+    };
   }
   
   async delete(id) {

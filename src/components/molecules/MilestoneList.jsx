@@ -1,7 +1,7 @@
-import React from 'react';
-import { motion } from 'framer-motion';
-import ApperIcon from '@/components/ApperIcon';
-import { format } from 'date-fns';
+import React from "react";
+import { motion } from "framer-motion";
+import { format } from "date-fns";
+import ApperIcon from "@/components/ApperIcon";
 
 const MilestoneList = ({ milestones, onToggle, showCheckboxes = true }) => {
   if (!milestones || milestones.length === 0) {
@@ -29,9 +29,35 @@ const MilestoneList = ({ milestones, onToggle, showCheckboxes = true }) => {
             }
           `}
         >
-          {showCheckboxes && (
+{showCheckboxes && (
             <button
-              onClick={() => onToggle(milestone.Id)}
+              onClick={() => {
+                onToggle(milestone.Id);
+if (!milestone.completed) {
+                  // Trigger celebration for milestone completion
+                  setTimeout(() => {
+                    const event = typeof CustomEvent !== 'undefined' 
+                      ? new CustomEvent('milestone-completed', {
+                          detail: {
+                            type: 'milestone',
+                            title: milestone.title,
+                            message: `🎉 Milestone completed: ${milestone.title}!`
+                          }
+                        })
+                      : new Event('milestone-completed');
+                    
+                    if (typeof CustomEvent === 'undefined' && event.detail === undefined) {
+                      event.detail = {
+                        type: 'milestone',
+                        title: milestone.title,
+                        message: `🎉 Milestone completed: ${milestone.title}!`
+                      };
+                    }
+                    
+                    window.dispatchEvent(event);
+                  }, 100);
+                }
+              }}
               className={`
                 flex-shrink-0 w-6 h-6 rounded-full border-2 flex items-center justify-center transition-all duration-200
                 ${milestone.completed

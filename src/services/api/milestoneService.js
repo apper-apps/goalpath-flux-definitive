@@ -39,15 +39,30 @@ class MilestoneService {
     return { ...newMilestone };
   }
   
-  async update(id, milestoneData) {
+async update(id, milestoneData) {
     await this.delay();
     const index = this.milestones.findIndex(m => m.Id === id);
     if (index === -1) {
       throw new Error('Milestone not found');
     }
     
-    this.milestones[index] = { ...this.milestones[index], ...milestoneData };
-    return { ...this.milestones[index] };
+    const oldMilestone = { ...this.milestones[index] };
+    const updatedData = { ...milestoneData };
+    
+    // If milestone is being completed, add completion timestamp
+    if (updatedData.completed && !oldMilestone.completed) {
+      updatedData.completedAt = new Date().toISOString();
+    }
+    
+    this.milestones[index] = { ...this.milestones[index], ...updatedData };
+    
+    // Return completion info for celebration triggers
+    const wasCompleted = !oldMilestone.completed && updatedData.completed;
+    
+    return { 
+      ...this.milestones[index], 
+      justCompleted: wasCompleted 
+    };
   }
   
   async delete(id) {

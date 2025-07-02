@@ -1,17 +1,21 @@
-import React, { useState, useEffect } from 'react';
-import { Outlet } from 'react-router-dom';
-import Sidebar from '@/components/organisms/Sidebar';
-import Header from '@/components/organisms/Header';
-import CheckInModal from '@/components/molecules/CheckInModal';
-import { useStreak } from '@/hooks/useStreak';
-import { useGoals } from '@/hooks/useGoals';
-import { checkInService } from '@/services/api/checkInService';
-import { notificationService } from '@/services/api/notificationService';
-import { toast } from 'react-toastify';
+import React, { useEffect, useState } from "react";
+import { Outlet } from "react-router-dom";
+import { useStreak } from "@/hooks/useStreak";
+import { useGoals } from "@/hooks/useGoals";
+import { toast } from "react-toastify";
+import Sidebar from "@/components/organisms/Sidebar";
+import Header from "@/components/organisms/Header";
+import CheckInModal from "@/components/molecules/CheckInModal";
+import { notificationService } from "@/services/api/notificationService";
+import { checkInService } from "@/services/api/checkInService";
+
+const CelebrationModal = React.lazy(() => import('@/components/molecules/CelebrationModal'));
 const Layout = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [checkInModalOpen, setCheckInModalOpen] = useState(false);
   const [checkInLoading, setCheckInLoading] = useState(false);
+  const [celebrationModalOpen, setCelebrationModalOpen] = useState(false);
+  const [celebrationData, setCelebrationData] = useState(null);
   
   const { streak, updateStreak } = useStreak();
   const { goals, loading: goalsLoading } = useGoals();
@@ -33,15 +37,20 @@ const Layout = () => {
       toast.success('Daily check-in completed! 🎉');
     } catch (error) {
       toast.error('Failed to complete check-in. Please try again.');
-    } finally {
+} finally {
       setCheckInLoading(false);
     }
   };
   
-  // Close sidebar on route change (mobile)
+  const handleCelebration = (data) => {
+    setCelebrationData(data);
+    setCelebrationModalOpen(true);
+  };
+  
+// Close sidebar on route change (mobile)
   useEffect(() => {
     setSidebarOpen(false);
-  }, [location.pathname]);
+  }, []);
   
   return (
     <div className="flex h-screen bg-background text-white overflow-hidden">
@@ -54,14 +63,14 @@ const Layout = () => {
           streak={streak}
         />
         
-        <main className="flex-1 overflow-auto">
+<main className="flex-1 overflow-auto">
           <div className="h-full">
-            <Outlet />
+            <Outlet context={{ onCelebration: handleCelebration }} />
           </div>
         </main>
       </div>
       
-      <CheckInModal
+<CheckInModal
         isOpen={checkInModalOpen}
         onClose={() => setCheckInModalOpen(false)}
         goals={goals}
@@ -69,6 +78,13 @@ const Layout = () => {
         onSubmit={handleCheckInSubmit}
         isLoading={checkInLoading}
       />
+      {celebrationModalOpen && (
+        <CelebrationModal
+          isOpen={celebrationModalOpen}
+          onClose={() => setCelebrationModalOpen(false)}
+          data={celebrationData}
+        />
+      )}
     </div>
   );
 };
