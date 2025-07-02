@@ -1,0 +1,188 @@
+import React, { useState } from 'react';
+import { motion } from 'framer-motion';
+import Input from '@/components/atoms/Input';
+import Textarea from '@/components/atoms/Textarea';
+import Select from '@/components/atoms/Select';
+import Button from '@/components/atoms/Button';
+import ApperIcon from '@/components/ApperIcon';
+import { format } from 'date-fns';
+
+const GoalForm = ({ 
+  goal = null, 
+  onSubmit, 
+  onCancel, 
+  isLoading = false 
+}) => {
+  const [formData, setFormData] = useState({
+    title: goal?.title || '',
+    description: goal?.description || '',
+    category: goal?.category || 'personal',
+    targetDate: goal?.targetDate ? format(new Date(goal.targetDate), 'yyyy-MM-dd') : '',
+    status: goal?.status || 'active'
+  });
+  
+  const [errors, setErrors] = useState({});
+  const [showAISuggestions, setShowAISuggestions] = useState(false);
+  
+  const categoryOptions = [
+    { value: 'personal', label: 'Personal' },
+    { value: 'professional', label: 'Professional' }
+  ];
+  
+  const statusOptions = [
+    { value: 'active', label: 'Active' },
+    { value: 'paused', label: 'Paused' },
+    { value: 'completed', label: 'Completed' }
+  ];
+  
+  const handleChange = (field, value) => {
+    setFormData(prev => ({ ...prev, [field]: value }));
+    if (errors[field]) {
+      setErrors(prev => ({ ...prev, [field]: null }));
+    }
+  };
+  
+  const validateForm = () => {
+    const newErrors = {};
+    
+    if (!formData.title.trim()) {
+      newErrors.title = 'Title is required';
+    }
+    
+    if (!formData.targetDate) {
+      newErrors.targetDate = 'Target date is required';
+    } else if (new Date(formData.targetDate) <= new Date()) {
+      newErrors.targetDate = 'Target date must be in the future';
+    }
+    
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+  
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (validateForm()) {
+      onSubmit({
+        ...formData,
+        targetDate: new Date(formData.targetDate).toISOString()
+      });
+    }
+  };
+  
+  const generateAIMilestones = () => {
+    setShowAISuggestions(true);
+    // Simulate AI processing
+    setTimeout(() => {
+      setShowAISuggestions(false);
+    }, 2000);
+  };
+  
+  return (
+    <motion.form
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      onSubmit={handleSubmit}
+      className="space-y-6"
+    >
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div className="md:col-span-2">
+          <Input
+            label="Goal Title"
+            required
+            value={formData.title}
+            onChange={(e) => handleChange('title', e.target.value)}
+            error={errors.title}
+            placeholder="Enter your goal title..."
+          />
+        </div>
+        
+        <Select
+          label="Category"
+          required
+          value={formData.category}
+          onChange={(e) => handleChange('category', e.target.value)}
+          options={categoryOptions}
+          error={errors.category}
+        />
+        
+        <Input
+          label="Target Date"
+          type="date"
+          required
+          value={formData.targetDate}
+          onChange={(e) => handleChange('targetDate', e.target.value)}
+          error={errors.targetDate}
+        />
+        
+        {goal && (
+          <Select
+            label="Status"
+            value={formData.status}
+            onChange={(e) => handleChange('status', e.target.value)}
+            options={statusOptions}
+          />
+        )}
+        
+        <div className="md:col-span-2">
+          <Textarea
+            label="Description"
+            value={formData.description}
+            onChange={(e) => handleChange('description', e.target.value)}
+            placeholder="Describe your goal in detail..."
+            rows={4}
+          />
+        </div>
+      </div>
+      
+      {!goal && formData.title && (
+        <motion.div
+          initial={{ opacity: 0, height: 0 }}
+          animate={{ opacity: 1, height: 'auto' }}
+          className="bg-primary/5 border border-primary/20 rounded-lg p-4"
+        >
+          <div className="flex items-center justify-between mb-3">
+            <h4 className="font-medium text-white flex items-center gap-2">
+              <ApperIcon name="Sparkles" size={20} className="text-primary" />
+              AI Milestone Generator
+            </h4>
+            <Button
+              type="button"
+              variant="accent"
+              size="sm"
+              onClick={generateAIMilestones}
+              loading={showAISuggestions}
+            >
+              Generate Milestones
+            </Button>
+          </div>
+          <p className="text-slate-400 text-sm">
+            Let AI break down your goal into actionable milestones with suggested timelines.
+          </p>
+        </motion.div>
+      )}
+      
+      <div className="flex gap-3 pt-6 border-t border-slate-600">
+        <Button
+          type="submit"
+          variant="primary"
+          loading={isLoading}
+          className="flex-1"
+        >
+          <ApperIcon name={goal ? "Save" : "Plus"} size={20} className="mr-2" />
+          {goal ? 'Update Goal' : 'Create Goal'}
+        </Button>
+        
+        <Button
+          type="button"
+          variant="secondary"
+          onClick={onCancel}
+          disabled={isLoading}
+        >
+          Cancel
+        </Button>
+      </div>
+    </motion.form>
+  );
+};
+
+export default GoalForm;

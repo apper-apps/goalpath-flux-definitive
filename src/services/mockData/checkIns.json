@@ -1,0 +1,72 @@
+[
+  {
+    "Id": 1,
+    "date": "2024-08-15T09:30:00.000Z",
+    "mood": 4,
+    "completedMilestones": [19, 22],
+    "notes": "Great progress today! Finished another book and worked on AWS project. Feeling motivated about reaching my goals."
+  },
+  {
+    "Id": 2,
+    "date": "2024-08-14T08:45:00.000Z",
+    "mood": 3,
+    "completedMilestones": [],
+    "notes": "Regular day. Didn't complete any major milestones but stayed consistent with daily habits."
+  },
+  {
+    "Id": 3,
+    "date": "2024-08-13T19:20:00.000Z",
+    "mood": 5,
+    "completedMilestones": [9],
+    "notes": "Amazing training run today! Completed my 20-mile run ahead of schedule. Marathon training is going better than expected."
+  },
+  {
+    "Id": 4,
+    "date": "2024-08-12T10:15:00.000Z",
+    "mood": 2,
+    "completedMilestones": [],
+    "notes": "Tough day. Struggled with motivation and didn't make much progress. Tomorrow will be better."
+  },
+  {
+    "Id": 5,
+    "date": "2024-08-11T11:30:00.000Z",
+    "mood": 4,
+    "completedMilestones": [13],
+    "notes": "Major breakthrough with the app development! Core functionality is finally working as expected."
+  },
+  {
+    "Id": 6,
+    "date": "2024-08-10T16:45:00.000Z",
+    "mood": 3,
+    "completedMilestones": [],
+    "notes": "Steady progress on Spanish practice. Had a good conversation session with my language partner."
+  },
+  {
+    "Id": 7,
+    "date": "2024-08-09T07:20:00.000Z",
+    "mood": 4,
+    "completedMilestones": [],
+    "notes": "Early morning run felt great. Energy levels have been much better since establishing this routine."
+  },
+  {
+    "Id": 8,
+    "date": "2024-08-08T21:10:00.000Z",
+    "mood": 3,
+    "completedMilestones": [],
+    "notes": "Late check-in today. Spent most of the day reading and working on personal projects."
+  },
+  {
+    "Id": 9,
+    "date": "2024-08-07T12:00:00.000Z",
+    "mood": 5,
+    "completedMilestones": [4],
+    "notes": "Incredible milestone! Had my first full hour conversation in Spanish with a native speaker. So proud of this achievement!"
+  },
+  {
+    "Id": 10,
+    "date": "2024-08-06T14:30:00.000Z",
+    "mood": 3,
+    "completedMilestones": [],
+    "notes": "Consistent day. Worked on various projects and maintained my learning schedule."
+  }
+]

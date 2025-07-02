@@ -1,0 +1,226 @@
+[
+  {
+    "Id": 1,
+    "goalId": 1,
+    "title": "Complete basic Spanish course",
+    "dueDate": "2024-03-15T00:00:00.000Z",
+    "completed": true,
+    "completedAt": "2024-03-12T00:00:00.000Z"
+  },
+  {
+    "Id": 2,
+    "goalId": 1,
+    "title": "Practice daily conversation for 30 days",
+    "dueDate": "2024-05-01T00:00:00.000Z",
+    "completed": true,
+    "completedAt": "2024-04-28T00:00:00.000Z"
+  },
+  {
+    "Id": 3,
+    "goalId": 1,
+    "title": "Watch Spanish movies with subtitles",
+    "dueDate": "2024-07-15T00:00:00.000Z",
+    "completed": true,
+    "completedAt": "2024-07-10T00:00:00.000Z"
+  },
+  {
+    "Id": 4,
+    "goalId": 1,
+    "title": "Have 1-hour conversation with native speaker",
+    "dueDate": "2024-09-30T00:00:00.000Z",
+    "completed": false,
+    "completedAt": null
+  },
+  {
+    "Id": 5,
+    "goalId": 1,
+    "title": "Pass intermediate Spanish proficiency test",
+    "dueDate": "2024-11-30T00:00:00.000Z",
+    "completed": false,
+    "completedAt": null
+  },
+  {
+    "Id": 6,
+    "goalId": 2,
+    "title": "Run 5K without stopping",
+    "dueDate": "2024-03-01T00:00:00.000Z",
+    "completed": true,
+    "completedAt": "2024-02-28T00:00:00.000Z"
+  },
+  {
+    "Id": 7,
+    "goalId": 2,
+    "title": "Complete 10K race",
+    "dueDate": "2024-05-15T00:00:00.000Z",
+    "completed": true,
+    "completedAt": "2024-05-12T00:00:00.000Z"
+  },
+  {
+    "Id": 8,
+    "goalId": 2,
+    "title": "Run half marathon",
+    "dueDate": "2024-07-30T00:00:00.000Z",
+    "completed": true,
+    "completedAt": "2024-07-25T00:00:00.000Z"
+  },
+  {
+    "Id": 9,
+    "goalId": 2,
+    "title": "Complete 20-mile training run",
+    "dueDate": "2024-09-15T00:00:00.000Z",
+    "completed": false,
+    "completedAt": null
+  },
+  {
+    "Id": 10,
+    "goalId": 2,
+    "title": "Finish full marathon",
+    "dueDate": "2024-10-15T00:00:00.000Z",
+    "completed": false,
+    "completedAt": null
+  },
+  {
+    "Id": 11,
+    "goalId": 3,
+    "title": "Complete market research and planning",
+    "dueDate": "2024-02-28T00:00:00.000Z",
+    "completed": true,
+    "completedAt": "2024-02-25T00:00:00.000Z"
+  },
+  {
+    "Id": 12,
+    "goalId": 3,
+    "title": "Design app wireframes and UI mockups",
+    "dueDate": "2024-04-15T00:00:00.000Z",
+    "completed": true,
+    "completedAt": "2024-04-10T00:00:00.000Z"
+  },
+  {
+    "Id": 13,
+    "goalId": 3,
+    "title": "Develop core app functionality",
+    "dueDate": "2024-07-30T00:00:00.000Z",
+    "completed": false,
+    "completedAt": null
+  },
+  {
+    "Id": 14,
+    "goalId": 3,
+    "title": "Implement user authentication system",
+    "dueDate": "2024-09-15T00:00:00.000Z",
+    "completed": false,
+    "completedAt": null
+  },
+  {
+    "Id": 15,
+    "goalId": 3,
+    "title": "Beta test with 50 users",
+    "dueDate": "2024-10-30T00:00:00.000Z",
+    "completed": false,
+    "completedAt": null
+  },
+  {
+    "Id": 16,
+    "goalId": 3,
+    "title": "Launch on app stores",
+    "dueDate": "2024-11-30T00:00:00.000Z",
+    "completed": false,
+    "completedAt": null
+  },
+  {
+    "Id": 17,
+    "goalId": 4,
+    "title": "Read 6 books by March",
+    "dueDate": "2024-03-31T00:00:00.000Z",
+    "completed": true,
+    "completedAt": "2024-03-29T00:00:00.000Z"
+  },
+  {
+    "Id": 18,
+    "goalId": 4,
+    "title": "Read 12 books by June",
+    "dueDate": "2024-06-30T00:00:00.000Z",
+    "completed": true,
+    "completedAt": "2024-06-28T00:00:00.000Z"
+  },
+  {
+    "Id": 19,
+    "goalId": 4,
+    "title": "Read 18 books by September",
+    "dueDate": "2024-09-30T00:00:00.000Z",
+    "completed": false,
+    "completedAt": null
+  },
+  {
+    "Id": 20,
+    "goalId": 4,
+    "title": "Complete 24 books by year end",
+    "dueDate": "2024-12-31T00:00:00.000Z",
+    "completed": false,
+    "completedAt": null
+  },
+  {
+    "Id": 21,
+    "goalId": 5,
+    "title": "Complete AWS Cloud Practitioner course",
+    "dueDate": "2024-04-30T00:00:00.000Z",
+    "completed": true,
+    "completedAt": "2024-04-25T00:00:00.000Z"
+  },
+  {
+    "Id": 22,
+    "goalId": 5,
+    "title": "Build three AWS practice projects",
+    "dueDate": "2024-06-30T00:00:00.000Z",
+    "completed": false,
+    "completedAt": null
+  },
+  {
+    "Id": 23,
+    "goalId": 5,
+    "title": "Take practice exams and score 80%+",
+    "dueDate": "2024-08-31T00:00:00.000Z",
+    "completed": false,
+    "completedAt": null
+  },
+  {
+    "Id": 24,
+    "goalId": 5,
+    "title": "Schedule and pass certification exam",
+    "dueDate": "2024-09-30T00:00:00.000Z",
+    "completed": false,
+    "completedAt": null
+  },
+  {
+    "Id": 25,
+    "goalId": 6,
+    "title": "Complete React fundamentals course",
+    "dueDate": "2024-01-31T00:00:00.000Z",
+    "completed": true,
+    "completedAt": "2024-01-28T00:00:00.000Z"
+  },
+  {
+    "Id": 26,
+    "goalId": 6,
+    "title": "Build todo app project",
+    "dueDate": "2024-03-15T00:00:00.000Z",
+    "completed": true,
+    "completedAt": "2024-03-10T00:00:00.000Z"
+  },
+  {
+    "Id": 27,
+    "goalId": 6,
+    "title": "Create weather dashboard app",
+    "dueDate": "2024-05-30T00:00:00.000Z",
+    "completed": true,
+    "completedAt": "2024-05-25T00:00:00.000Z"
+  },
+  {
+    "Id": 28,
+    "goalId": 6,
+    "title": "Develop e-commerce site with cart",
+    "dueDate": "2024-08-15T00:00:00.000Z",
+    "completed": true,
+    "completedAt": "2024-08-10T00:00:00.000Z"
+  }
+]

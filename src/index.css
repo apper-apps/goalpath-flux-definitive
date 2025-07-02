@@ -1,0 +1,130 @@
+@import 'react-toastify/dist/ReactToastify.css';
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: 'Inter', system-ui, sans-serif;
+  background-color: #0F172A;
+  color: #F1F5F9;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.Toastify__toast-container {
+  width: 400px;
+  max-width: calc(100vw - 32px);
+}
+
+.Toastify__toast {
+  border-radius: 12px;
+  padding: 16px;
+  font-family: 'Inter', system-ui, sans-serif;
+  font-size: 14px;
+  background: #1E293B;
+  color: #F1F5F9;
+  border: 1px solid #334155;
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3);
+}
+
+.Toastify__toast--success {
+  border-left: 4px solid #10B981;
+}
+
+.Toastify__toast--error {
+  border-left: 4px solid #EF4444;
+}
+
+.Toastify__toast--warning {
+  border-left: 4px solid #F59E0B;
+}
+
+.Toastify__toast--info {
+  border-left: 4px solid #3B82F6;
+}
+
+.Toastify__progress-bar {
+  background: linear-gradient(135deg, #6366F1 0%, #8B5CF6 100%);
+}
+
+.Toastify__close-button {
+  color: #94A3B8;
+}
+
+.Toastify__close-button:hover {
+  color: #F1F5F9;
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -200px 0;
+  }
+  100% {
+    background-position: calc(200px + 100%) 0;
+  }
+}
+
+.shimmer {
+  background: linear-gradient(90deg, #1E293B 25%, #334155 50%, #1E293B 75%);
+  background-size: 200px 100%;
+  animation: shimmer 1.5s infinite;
+}
+
+@keyframes bounce-in {
+  0% { 
+    transform: scale(0); 
+    opacity: 0; 
+  }
+  50% { 
+    transform: scale(1.2); 
+    opacity: 0.8; 
+  }
+  100% { 
+    transform: scale(1); 
+    opacity: 1; 
+  }
+}
+
+.bounce-in {
+  animation: bounce-in 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+@keyframes progress-fill {
+  from { 
+    width: 0%; 
+  }
+  to { 
+    width: var(--progress-width); 
+  }
+}
+
+.progress-animate {
+  animation: progress-fill 1s ease-out forwards;
+}
+
+.gradient-text {
+  background: linear-gradient(135deg, #6366F1 0%, #8B5CF6 50%, #EC4899 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.glow {
+  box-shadow: 0 0 20px rgba(99, 102, 241, 0.3);
+}
+
+.glow-accent {
+  box-shadow: 0 0 20px rgba(236, 72, 153, 0.3);
+}
+
+.glass {
+  backdrop-filter: blur(16px);
+  background: rgba(30, 41, 59, 0.8);
+  border: 1px solid rgba(148, 163, 184, 0.1);
+}

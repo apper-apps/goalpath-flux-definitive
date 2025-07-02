@@ -1,0 +1,62 @@
+[
+  {
+    "Id": 1,
+    "title": "Learn Spanish Fluently",
+    "description": "Achieve conversational fluency in Spanish through daily practice and immersion techniques.",
+    "category": "personal",
+    "targetDate": "2024-12-31T00:00:00.000Z",
+    "createdAt": "2024-01-15T10:30:00.000Z",
+    "progress": 65,
+    "status": "active"
+  },
+  {
+    "Id": 2,
+    "title": "Complete Marathon Training",
+    "description": "Train consistently to complete my first full marathon in under 4 hours.",
+    "category": "personal",
+    "targetDate": "2024-10-15T00:00:00.000Z",
+    "createdAt": "2024-02-01T09:00:00.000Z",
+    "progress": 78,
+    "status": "active"
+  },
+  {
+    "Id": 3,
+    "title": "Launch Mobile App",
+    "description": "Develop and launch a productivity mobile app with core features and user authentication.",
+    "category": "professional",
+    "targetDate": "2024-11-30T00:00:00.000Z",
+    "createdAt": "2024-01-20T14:15:00.000Z",
+    "progress": 45,
+    "status": "active"
+  },
+  {
+    "Id": 4,
+    "title": "Read 24 Books This Year",
+    "description": "Expand knowledge and improve reading habits by completing 2 books per month.",
+    "category": "personal",
+    "targetDate": "2024-12-31T00:00:00.000Z",
+    "createdAt": "2024-01-01T00:00:00.000Z",
+    "progress": 58,
+    "status": "active"
+  },
+  {
+    "Id": 5,
+    "title": "Get Cloud Architecture Certification",
+    "description": "Obtain AWS Solutions Architect certification to advance career opportunities.",
+    "category": "professional",
+    "targetDate": "2024-09-30T00:00:00.000Z",
+    "createdAt": "2024-03-01T11:20:00.000Z",
+    "progress": 32,
+    "status": "active"
+  },
+  {
+    "Id": 6,
+    "title": "Master JavaScript Framework",
+    "description": "Become proficient in React and build three real-world projects to showcase skills.",
+    "category": "professional",
+    "targetDate": "2024-08-15T00:00:00.000Z",
+    "createdAt": "2023-12-15T16:45:00.000Z",
+    "progress": 100,
+    "status": "completed"
+  }
+]
