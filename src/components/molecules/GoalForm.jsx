@@ -9,15 +9,26 @@ import { format } from 'date-fns';
 
 const GoalForm = ({ 
   goal = null, 
+  template = null,
   onSubmit, 
   onCancel, 
   isLoading = false 
 }) => {
+  // Calculate target date for template
+  const getTemplateTargetDate = () => {
+    if (template?.suggestedDuration) {
+      const targetDate = new Date();
+      targetDate.setDate(targetDate.getDate() + template.suggestedDuration);
+      return format(targetDate, 'yyyy-MM-dd');
+    }
+    return '';
+  };
+
   const [formData, setFormData] = useState({
-    title: goal?.title || '',
-    description: goal?.description || '',
-    category: goal?.category || 'personal',
-    targetDate: goal?.targetDate ? format(new Date(goal.targetDate), 'yyyy-MM-dd') : '',
+    title: goal?.title || template?.title || '',
+    description: goal?.description || template?.description || '',
+    category: goal?.category || template?.category || 'personal',
+    targetDate: goal?.targetDate ? format(new Date(goal.targetDate), 'yyyy-MM-dd') : getTemplateTargetDate(),
     status: goal?.status || 'active'
   });
   
@@ -134,7 +145,23 @@ const GoalForm = ({
         </div>
       </div>
       
-      {!goal && formData.title && (
+{template && (
+        <motion.div
+          initial={{ opacity: 0, height: 0 }}
+          animate={{ opacity: 1, height: 'auto' }}
+          className="bg-accent/5 border border-accent/20 rounded-lg p-4"
+        >
+          <div className="flex items-center gap-2 mb-2">
+            <ApperIcon name={template.icon} size={16} className="text-accent" />
+            <h4 className="font-medium text-white">Template Selected</h4>
+          </div>
+          <p className="text-slate-400 text-sm">
+            Using "{template.title}" template with {template.milestoneTemplates.length} pre-designed milestones
+          </p>
+        </motion.div>
+      )}
+
+      {!goal && !template && formData.title && (
         <motion.div
           initial={{ opacity: 0, height: 0 }}
           animate={{ opacity: 1, height: 'auto' }}
@@ -160,7 +187,6 @@ const GoalForm = ({
           </p>
         </motion.div>
       )}
-      
       <div className="flex gap-3 pt-6 border-t border-slate-600">
         <Button
           type="submit"

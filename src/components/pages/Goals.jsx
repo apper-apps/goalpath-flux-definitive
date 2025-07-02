@@ -1,21 +1,24 @@
-import React, { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import GoalCard from '@/components/molecules/GoalCard';
-import GoalForm from '@/components/molecules/GoalForm';
-import FilterBar from '@/components/molecules/FilterBar';
-import Button from '@/components/atoms/Button';
-import ApperIcon from '@/components/ApperIcon';
-import Loading from '@/components/ui/Loading';
-import Error from '@/components/ui/Error';
-import Empty from '@/components/ui/Empty';
-import { useGoals } from '@/hooks/useGoals';
-import { goalService } from '@/services/api/goalService';
-import { milestoneService } from '@/services/api/milestoneService';
-import { toast } from 'react-toastify';
+import React, { useState } from "react";
+import { AnimatePresence, motion } from "framer-motion";
+import TemplateGallery from "@/components/molecules/TemplateGallery";
+import { useGoals } from "@/hooks/useGoals";
+import { toast } from "react-toastify";
+import ApperIcon from "@/components/ApperIcon";
+import Button from "@/components/atoms/Button";
+import GoalCard from "@/components/molecules/GoalCard";
+import GoalForm from "@/components/molecules/GoalForm";
+import FilterBar from "@/components/molecules/FilterBar";
+import Error from "@/components/ui/Error";
+import Empty from "@/components/ui/Empty";
+import Loading from "@/components/ui/Loading";
+import { milestoneService } from "@/services/api/milestoneService";
+import { goalService } from "@/services/api/goalService";
 
 const Goals = () => {
   const [showForm, setShowForm] = useState(false);
+  const [showTemplateGallery, setShowTemplateGallery] = useState(false);
   const [editingGoal, setEditingGoal] = useState(null);
+  const [selectedTemplate, setSelectedTemplate] = useState(null);
   const [filter, setFilter] = useState('all');
   const [searchQuery, setSearchQuery] = useState('');
   const [formLoading, setFormLoading] = useState(false);
@@ -111,9 +114,15 @@ const Goals = () => {
       setFormLoading(false);
     }
   };
-  
-  const handleEdit = (goal) => {
+const handleEdit = (goal) => {
     setEditingGoal(goal);
+    setSelectedTemplate(null);
+    setShowForm(true);
+  };
+
+  const handleSelectTemplate = (template) => {
+    setSelectedTemplate(template);
+    setEditingGoal(null);
     setShowForm(true);
   };
   
@@ -140,8 +149,8 @@ const Goals = () => {
   const handleCancel = () => {
     setShowForm(false);
     setEditingGoal(null);
+    setSelectedTemplate(null);
   };
-  
   if (loading) {
     return (
       <div className="p-6">
@@ -217,16 +226,27 @@ const Goals = () => {
                 <p className="text-slate-400">
                   {filteredGoals.length} {filter === 'all' ? '' : filter} goal{filteredGoals.length !== 1 ? 's' : ''}
                 </p>
-              </div>
+</div>
               
-              <Button
-                variant="primary"
-                onClick={() => setShowForm(true)}
-                className="flex items-center gap-2 glow"
-              >
-                <ApperIcon name="Plus" size={16} />
-                Create Goal
-              </Button>
+              <div className="flex gap-3">
+                <Button
+                  variant="ghost"
+                  onClick={() => setShowTemplateGallery(true)}
+                  className="flex items-center gap-2"
+                >
+                  <ApperIcon name="Grid3X3" size={16} />
+                  Browse Templates
+                </Button>
+                
+                <Button
+                  variant="primary"
+                  onClick={() => setShowForm(true)}
+                  className="flex items-center gap-2 glow"
+                >
+                  <ApperIcon name="Plus" size={16} />
+                  Create Goal
+                </Button>
+              </div>
             </div>
             
             <FilterBar
@@ -277,10 +297,17 @@ const Goals = () => {
                   </motion.div>
                 ))}
               </div>
-            )}
+)}
           </motion.div>
         )}
       </AnimatePresence>
+
+      {/* Template Gallery Modal */}
+      <TemplateGallery
+        isOpen={showTemplateGallery}
+        onClose={() => setShowTemplateGallery(false)}
+        onSelectTemplate={handleSelectTemplate}
+      />
     </div>
   );
 };

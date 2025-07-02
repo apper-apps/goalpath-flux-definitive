@@ -1,0 +1,322 @@
+[
+  {
+    "Id": 1,
+    "title": "Get Fit and Healthy",
+    "description": "Transform your fitness level with a comprehensive workout and nutrition plan",
+    "category": "fitness",
+    "icon": "Dumbbell",
+    "suggestedDuration": 90,
+    "milestoneTemplates": [
+      { "title": "Create workout schedule", "days": 7 },
+      { "title": "Complete first week consistently", "days": 14 },
+      { "title": "Track nutrition for 2 weeks", "days": 21 },
+      { "title": "Reach first fitness milestone", "days": 30 },
+      { "title": "Complete 6-week fitness assessment", "days": 45 },
+      { "title": "Achieve target fitness level", "days": 90 }
+    ]
+  },
+  {
+    "Id": 2,
+    "title": "Run a 5K Race",
+    "description": "Train systematically to complete your first 5K run with confidence",
+    "category": "fitness",
+    "icon": "Zap",
+    "suggestedDuration": 60,
+    "milestoneTemplates": [
+      { "title": "Complete Week 1 training plan", "days": 7 },
+      { "title": "Run 2K without stopping", "days": 21 },
+      { "title": "Complete 3K practice run", "days": 35 },
+      { "title": "Run full 5K distance", "days": 50 },
+      { "title": "Register for official 5K race", "days": 55 },
+      { "title": "Complete first 5K race", "days": 60 }
+    ]
+  },
+  {
+    "Id": 3,
+    "title": "Lose 20 Pounds",
+    "description": "Achieve sustainable weight loss through balanced diet and exercise",
+    "category": "fitness",
+    "icon": "TrendingDown",
+    "suggestedDuration": 120,
+    "milestoneTemplates": [
+      { "title": "Set up meal planning system", "days": 7 },
+      { "title": "Lose first 5 pounds", "days": 30 },
+      { "title": "Establish consistent exercise routine", "days": 21 },
+      { "title": "Reach 10-pound weight loss", "days": 60 },
+      { "title": "Achieve 15-pound milestone", "days": 90 },
+      { "title": "Reach target weight of 20 pounds lost", "days": 120 }
+    ]
+  },
+  {
+    "Id": 4,
+    "title": "Get a Promotion",
+    "description": "Advance your career by developing skills and demonstrating leadership",
+    "category": "career",
+    "icon": "TrendingUp",
+    "suggestedDuration": 180,
+    "milestoneTemplates": [
+      { "title": "Identify promotion requirements", "days": 14 },
+      { "title": "Create skill development plan", "days": 21 },
+      { "title": "Complete first certification/course", "days": 60 },
+      { "title": "Take on leadership project", "days": 90 },
+      { "title": "Request feedback from manager", "days": 120 },
+      { "title": "Apply for promotion", "days": 180 }
+    ]
+  },
+  {
+    "Id": 5,
+    "title": "Start a Side Business",
+    "description": "Launch and grow a profitable side business while maintaining your day job",
+    "category": "career",
+    "icon": "Briefcase",
+    "suggestedDuration": 120,
+    "milestoneTemplates": [
+      { "title": "Research business ideas and market", "days": 14 },
+      { "title": "Create business plan", "days": 30 },
+      { "title": "Set up legal structure and finances", "days": 45 },
+      { "title": "Launch MVP or initial offering", "days": 60 },
+      { "title": "Acquire first 10 customers", "days": 90 },
+      { "title": "Reach monthly profit goal", "days": 120 }
+    ]
+  },
+  {
+    "Id": 6,
+    "title": "Switch Careers",
+    "description": "Successfully transition to a new career field with proper preparation",
+    "category": "career",
+    "icon": "RefreshCw",
+    "suggestedDuration": 365,
+    "milestoneTemplates": [
+      { "title": "Research target industry and roles", "days": 30 },
+      { "title": "Identify skill gaps and training needs", "days": 45 },
+      { "title": "Complete relevant certification or course", "days": 120 },
+      { "title": "Build portfolio of relevant work", "days": 180 },
+      { "title": "Network with industry professionals", "days": 240 },
+      { "title": "Land first job in new career", "days": 365 }
+    ]
+  },
+  {
+    "Id": 7,
+    "title": "Learn a New Programming Language",
+    "description": "Master a new programming language through structured learning and practice",
+    "category": "learning",
+    "icon": "Code",
+    "suggestedDuration": 90,
+    "milestoneTemplates": [
+      { "title": "Complete basic syntax tutorial", "days": 14 },
+      { "title": "Build first simple project", "days": 30 },
+      { "title": "Learn intermediate concepts", "days": 45 },
+      { "title": "Contribute to open source project", "days": 60 },
+      { "title": "Build complex personal project", "days": 75 },
+      { "title": "Demonstrate proficiency", "days": 90 }
+    ]
+  },
+  {
+    "Id": 8,
+    "title": "Read 24 Books This Year",
+    "description": "Expand your knowledge and perspective by reading 2 books per month",
+    "category": "learning",
+    "icon": "BookOpen",
+    "suggestedDuration": 365,
+    "milestoneTemplates": [
+      { "title": "Read first 2 books", "days": 30 },
+      { "title": "Complete 6 books (quarter goal)", "days": 90 },
+      { "title": "Reach 12 books (halfway point)", "days": 180 },
+      { "title": "Complete 18 books", "days": 270 },
+      { "title": "Read 22 books", "days": 330 },
+      { "title": "Finish all 24 books", "days": 365 }
+    ]
+  },
+  {
+    "Id": 9,
+    "title": "Learn Spanish Fluently",
+    "description": "Achieve conversational fluency in Spanish through consistent practice",
+    "category": "learning",
+    "icon": "MessageCircle",
+    "suggestedDuration": 365,
+    "milestoneTemplates": [
+      { "title": "Complete beginner course", "days": 60 },
+      { "title": "Hold 5-minute conversation", "days": 120 },
+      { "title": "Read first Spanish book", "days": 180 },
+      { "title": "Watch Spanish movie without subtitles", "days": 240 },
+      { "title": "Pass intermediate proficiency test", "days": 300 },
+      { "title": "Demonstrate conversational fluency", "days": 365 }
+    ]
+  },
+  {
+    "Id": 10,
+    "title": "Master Data Science",
+    "description": "Develop comprehensive data science skills from basics to advanced techniques",
+    "category": "learning",
+    "icon": "BarChart3",
+    "suggestedDuration": 180,
+    "milestoneTemplates": [
+      { "title": "Learn Python and statistics basics", "days": 30 },
+      { "title": "Complete first data analysis project", "days": 60 },
+      { "title": "Master machine learning fundamentals", "days": 90 },
+      { "title": "Build predictive model", "days": 120 },
+      { "title": "Complete capstone project", "days": 150 },
+      { "title": "Land data science role or certification", "days": 180 }
+    ]
+  },
+  {
+    "Id": 11,
+    "title": "Save $10,000 Emergency Fund",
+    "description": "Build a solid financial safety net with a $10,000 emergency fund",
+    "category": "finance",
+    "icon": "Shield",
+    "suggestedDuration": 365,
+    "milestoneTemplates": [
+      { "title": "Save first $1,000", "days": 30 },
+      { "title": "Reach $2,500 milestone", "days": 90 },
+      { "title": "Save $5,000 (halfway point)", "days": 180 },
+      { "title": "Achieve $7,500", "days": 270 },
+      { "title": "Reach $9,000", "days": 330 },
+      { "title": "Complete $10,000 emergency fund", "days": 365 }
+    ]
+  },
+  {
+    "Id": 12,
+    "title": "Pay Off Credit Card Debt",
+    "description": "Eliminate all credit card debt and achieve financial freedom",
+    "category": "finance",
+    "icon": "CreditCard",
+    "suggestedDuration": 180,
+    "milestoneTemplates": [
+      { "title": "List all debts and create payment plan", "days": 7 },
+      { "title": "Pay off smallest debt first", "days": 30 },
+      { "title": "Reduce total debt by 25%", "days": 60 },
+      { "title": "Achieve 50% debt reduction", "days": 120 },
+      { "title": "Pay off all but largest debt", "days": 150 },
+      { "title": "Become completely debt-free", "days": 180 }
+    ]
+  },
+  {
+    "Id": 13,
+    "title": "Invest $5,000 for Retirement",
+    "description": "Start building long-term wealth with consistent retirement investing",
+    "category": "finance",
+    "icon": "PiggyBank",
+    "suggestedDuration": 365,
+    "milestoneTemplates": [
+      { "title": "Research retirement account options", "days": 14 },
+      { "title": "Open investment account", "days": 21 },
+      { "title": "Make first $500 investment", "days": 30 },
+      { "title": "Reach $1,500 invested", "days": 90 },
+      { "title": "Achieve $3,000 milestone", "days": 180 },
+      { "title": "Complete $5,000 investment goal", "days": 365 }
+    ]
+  },
+  {
+    "Id": 14,
+    "title": "Buy a House",
+    "description": "Save for down payment and successfully purchase your first home",
+    "category": "finance",
+    "icon": "Home",
+    "suggestedDuration": 730,
+    "milestoneTemplates": [
+      { "title": "Determine budget and save target", "days": 30 },
+      { "title": "Improve credit score", "days": 90 },
+      { "title": "Save 25% of down payment", "days": 180 },
+      { "title": "Get pre-approved for mortgage", "days": 365 },
+      { "title": "Save full down payment", "days": 600 },
+      { "title": "Purchase first home", "days": 730 }
+    ]
+  },
+  {
+    "Id": 15,
+    "title": "Build Muscle and Strength",
+    "description": "Gain lean muscle mass and increase overall strength through resistance training",
+    "category": "fitness",
+    "icon": "Zap",
+    "suggestedDuration": 120,
+    "milestoneTemplates": [
+      { "title": "Design strength training program", "days": 7 },
+      { "title": "Complete first month consistently", "days": 30 },
+      { "title": "Increase weights by 10%", "days": 45 },
+      { "title": "Complete body composition assessment", "days": 60 },
+      { "title": "Achieve strength milestones", "days": 90 },
+      { "title": "Reach muscle gain and strength goals", "days": 120 }
+    ]
+  },
+  {
+    "Id": 16,
+    "title": "Become a Team Leader",
+    "description": "Develop leadership skills and advance to a team management position",
+    "category": "career",
+    "icon": "Users",
+    "suggestedDuration": 240,
+    "milestoneTemplates": [
+      { "title": "Complete leadership training course", "days": 30 },
+      { "title": "Volunteer for team project leadership", "days": 60 },
+      { "title": "Mentor junior team members", "days": 90 },
+      { "title": "Lead cross-functional initiative", "days": 150 },
+      { "title": "Apply for team lead positions", "days": 210 },
+      { "title": "Secure team leadership role", "days": 240 }
+    ]
+  },
+  {
+    "Id": 17,
+    "title": "Learn Digital Marketing",
+    "description": "Master digital marketing strategies including SEO, social media, and paid advertising",
+    "category": "learning",
+    "icon": "Megaphone",
+    "suggestedDuration": 120,
+    "milestoneTemplates": [
+      { "title": "Complete digital marketing fundamentals", "days": 21 },
+      { "title": "Learn SEO and content marketing", "days": 45 },
+      { "title": "Master social media marketing", "days": 60 },
+      { "title": "Study paid advertising (Google/Facebook)", "days": 80 },
+      { "title": "Launch first marketing campaign", "days": 100 },
+      { "title": "Achieve marketing certification", "days": 120 }
+    ]
+  },
+  {
+    "Id": 18,
+    "title": "Create a Budget and Stick to It",
+    "description": "Develop and maintain a sustainable monthly budget for better financial control",
+    "category": "finance",
+    "icon": "Calculator",
+    "suggestedDuration": 90,
+    "milestoneTemplates": [
+      { "title": "Track all expenses for one month", "days": 30 },
+      { "title": "Create detailed monthly budget", "days": 35 },
+      { "title": "Successfully follow budget for month 1", "days": 65 },
+      { "title": "Adjust and optimize budget", "days": 70 },
+      { "title": "Complete second month on budget", "days": 90 },
+      { "title": "Establish sustainable budgeting habit", "days": 90 }
+    ]
+  },
+  {
+    "Id": 19,
+    "title": "Train for a Marathon",
+    "description": "Complete comprehensive marathon training and finish your first 26.2-mile race",
+    "category": "fitness",
+    "icon": "Target",
+    "suggestedDuration": 120,
+    "milestoneTemplates": [
+      { "title": "Complete base building phase", "days": 30 },
+      { "title": "Run first 10-mile long run", "days": 45 },
+      { "title": "Complete 15-mile training run", "days": 60 },
+      { "title": "Finish 20-mile practice run", "days": 80 },
+      { "title": "Complete marathon taper week", "days": 115 },
+      { "title": "Finish first marathon race", "days": 120 }
+    ]
+  },
+  {
+    "Id": 20,
+    "title": "Start a YouTube Channel",
+    "description": "Launch and grow a successful YouTube channel with consistent content creation",
+    "category": "career",
+    "icon": "Video",
+    "suggestedDuration": 180,
+    "milestoneTemplates": [
+      { "title": "Define niche and content strategy", "days": 14 },
+      { "title": "Create channel and upload first video", "days": 21 },
+      { "title": "Publish 10 videos consistently", "days": 60 },
+      { "title": "Reach 100 subscribers", "days": 90 },
+      { "title": "Achieve 1,000 subscribers", "days": 150 },
+      { "title": "Monetize channel and reach goals", "days": 180 }
+    ]
+  }
+]
