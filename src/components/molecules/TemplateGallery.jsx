@@ -33,9 +33,9 @@ const TemplateGallery = ({ isOpen, onClose, onSelectTemplate }) => {
         templateService.getCategories()
       ]);
       
-      setTemplates(templatesData);
+setTemplates(templatesData);
       setCategories([
-        { value: 'all', label: 'All Templates', count: templatesData.length, icon: 'Grid3X3' },
+        { value: 'all', label: 'All Templates', icon: 'Grid3X3' },
         ...categoriesData
       ]);
     } catch (err) {
@@ -105,30 +105,37 @@ return (
 {/* Category Tabs */}
         <div className="px-6 py-4 border-b border-slate-600/50 overflow-x-auto flex-shrink-0">
           <div className="flex gap-2 min-w-max">
-            {categories.map((category) => (
-              <Button
-                key={category.value}
-                variant={activeCategory === category.value ? "primary" : "ghost"}
-                size="sm"
-                onClick={() => {
-                  setActiveCategory(category.value);
-                  // Scroll to top of content when category changes
-                  if (contentRef.current) {
-                    contentRef.current.scrollTo({
-                      top: 0,
-                      behavior: 'smooth'
-                    });
-                  }
-                }}
-                className="flex items-center gap-2 whitespace-nowrap"
-              >
-                <ApperIcon name={category.icon} size={16} />
-                {category.label}
-                <Badge variant="secondary" className="ml-1">
-                  {category.count}
-                </Badge>
-              </Button>
-            ))}
+            {categories.map((category) => {
+              // Calculate dynamic count for each category
+              const categoryCount = category.value === 'all' 
+                ? templates.length 
+                : templates.filter(template => template.category === category.value).length;
+              
+              return (
+                <Button
+                  key={category.value}
+                  variant={activeCategory === category.value ? "primary" : "ghost"}
+                  size="sm"
+                  onClick={() => {
+                    setActiveCategory(category.value);
+                    // Scroll to top of content when category changes
+                    if (contentRef.current) {
+                      contentRef.current.scrollTo({
+                        top: 0,
+                        behavior: 'smooth'
+                      });
+                    }
+                  }}
+                  className="flex items-center gap-2 whitespace-nowrap"
+                >
+                  <ApperIcon name={category.icon} size={16} />
+                  {category.label}
+                  <Badge variant="secondary" className="ml-1">
+                    {categoryCount}
+                  </Badge>
+                </Button>
+              );
+            })}
           </div>
         </div>
 {/* Content */}
